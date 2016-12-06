@@ -32,6 +32,7 @@ double factorial(int k)
 	return facto;
 }
 
+// we ask for the N
 int askForN()
 {
 	int n(0);
@@ -40,32 +41,34 @@ int askForN()
 		cin >> n;
 		if(n > 85){
 			cout << " The integer (n) is too high" << endl;
-		} else if(n <= 0){
+		} else if(n < 0){
 			cout << " The integer (n) is to low" << endl;
 		} else {
-			cout << " alright !! " << endl;
+			cout << " alright : " << n << endl;
 		}
 	}while(n > 85 || n < 0);
 	
 	return n;
 }
 
+// we ask for the X
 double askForX()
 {
 	double x;
 	do{
 		cout << "Write a number (x) greater than 0 " << endl;
 		cin >> x;
-	if(x < 0){
+	if(x < 1){
 		cout << " the number(x) is too low !!" << endl;
 	} else {
-		cout << " alright !!!" << endl;
+		cout << " alright : " << x << endl;
 	}
 	}while(x < 1);
 
 	return x;
 }
 
+// we calculate the cos.
 double partialSum(double x, int n)
 {
 	double cos(0);
