@@ -13,8 +13,8 @@ int main()
 /* expression 1*/
 	if(exp(x) != 1.0){
 		result = x / (1.0 - exp(x));
-		cout << " Expression 1 : " <<  result  << endl; 
-	} else { 
+		cout << " Expression 1 : " <<  result  << endl;
+	} else {
 		cout <<  " Expression 1 Undefined !" << endl;
 	}
 
@@ -28,18 +28,18 @@ int main()
 
 /* expression 3*/
 	if(x >= 8){
-		result = (-x - sqrt(x*x - 8.0 * x) ) / (2.0 - x);	
+		result = (-x - sqrt(x*x - 8.0 * x) ) / (2.0 - x);
 		cout << " Expression 3 : " << result << endl;
 	} else {
 		cout << " Expression 3 Undefined !" << endl;
 	}
 
 /* expression 4*/
-	if(x > 0){	
+	if(x > 0){
 		result = sqrt( (sin(x) - (x/20.0)) * log(x*x - 1/x));
 		cout << " Expression 4 : " << result << endl;
 
-		if(result == "-nan") {
+		if(result == 0) {
 			cout << " not good" << endl;
 		}
 	} else {
