@@ -19,11 +19,11 @@ int Fibonacci(int n)
 {
 	if(n <= 1)
 	{
-		cout << " n" << " = " << n << endl;
+    //cout << " n" << " = " << n << endl;
 		return n;
 	}
-   
-cout << Fibonacci(n-1) << " + " <<Fibonacci(n-2)  <<" = " << Fibonacci(n-1) + Fibonacci(n-2) << endl;
+
+    //cout << Fibonacci(n-1) << " + " <<Fibonacci(n-2)  <<" = " << Fibonacci(n-1) + Fibonacci(n-2) << endl;
 	return Fibonacci(n-1) +  Fibonacci(n-2);
 }
 
