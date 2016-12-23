@@ -7,31 +7,50 @@ using namespace std;
 //prototype
 int Fibonacci(int n);
 int askNumber();
+bool playAgain(0);
 
 int main()
 {
-	int F(0);
-	int askIt(0);
-	string nth;
-
-	askIt = askNumber();
-	F = Fibonacci(askIt);
+	do{
+		int F(0);
+		int askIt(0);
+		string nth;
 	
-	switch(askIt){
-		case 1:
-			nth = "st";
-			break;
-		case 2:
-			nth = "nd";
-			break;
-		case 3:
-			nth = "rd";
-			break;
-		default:
-			nth = "th";
-	}
+		askIt = askNumber();
+		F = Fibonacci(askIt);
+	
+		switch(askIt){
+			case 1:
+				nth = "st";
+				break;
+			case 2:
+				nth = "nd";
+				break;
+			case 3:
+				nth = "rd";
+				break;
+			default:
+				nth = "th";
+		}	
 
-	cout <<"The " << askIt << nth <<" number of fibonacci is "<< F << endl;
+		cout <<"The " << askIt << nth <<" number of fibonacci is "<< F << endl;
+		cout << " Do you want to play again ? (y or n)";
+
+		char inputAgain;
+		cin >> inputAgain;
+		cout << endl;
+
+		if(inputAgain == 'y'){
+			playAgain = 1;
+		} else {
+			if(inputAgain !='n'){
+				cout << " don't understand !" << endl;	
+			}
+			playAgain = 0;
+		}	
+
+	}while(playAgain == 1);
+
 	return 0;
 }
 
