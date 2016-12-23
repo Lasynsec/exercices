@@ -15,7 +15,7 @@ int main()
 	askIt = askNumber();
 	F = Fibonacci(askIt);
 
-	cout << F << endl;
+	cout <<" The" << <<"number of fibonacci is "<< F << endl;
 	return 0;
 }
 
