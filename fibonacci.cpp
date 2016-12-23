@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <string>
 
 using namespace std;
 
@@ -11,11 +12,26 @@ int main()
 {
 	int F(0);
 	int askIt(0);
-	
+	string nth;
+
 	askIt = askNumber();
 	F = Fibonacci(askIt);
+	
+	switch(askIt){
+		case 1:
+			nth = "st";
+			break;
+		case 2:
+			nth = "nd";
+			break;
+		case 3:
+			nth = "rd";
+			break;
+		default:
+			nth = "th";
+	}
 
-	cout <<" The" << <<"number of fibonacci is "<< F << endl;
+	cout <<"The " << askIt << nth <<" number of fibonacci is "<< F << endl;
 	return 0;
 }
 
@@ -45,12 +61,16 @@ int askNumber()
 	   cin >> number;
 	   cout << endl;
 
+
+
 	   if(number < 1)
 	   {
 	   	cout << " The number must be greater than 0 " << endl;	
+	   } else if(number > 40){
+	   	cout << " The number must be less  than 41" << endl;	
 	   }
        
-	}while(number < 1); // while number is not < 1
+	}while(number < 1 || number > 40); // while number is not < 1
 	
 	return number;
 }
