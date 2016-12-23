@@ -43,7 +43,7 @@ int main()
 		if(inputAgain == 'y'){
 			playAgain = 1;
 		} else {
-			if(inputAgain !='n'){
+			if(inputAgain !='n'){/* must loop if the user don't put the n button*/
 				cout << " don't understand !" << endl;	
 			}
 			playAgain = 0;
