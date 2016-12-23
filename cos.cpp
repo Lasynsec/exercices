@@ -78,4 +78,5 @@ double partialSum(double x, int n)
 	}
 	
 	return cos;
+>>>>>>> eabf1959fe9ce67914cf2cf9c2182568a9e72e00
 }
