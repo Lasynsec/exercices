@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//prototype
+//prototypes
 int Fibonacci(int n);
 int askNumber();
 bool playAgain(0);
@@ -66,7 +66,7 @@ int main()
 }
 
 /*
-	calculate the nth value of fiboncci.
+	calculate the nth value of fibonacci.
 */
 int Fibonacci(int n)
 {
