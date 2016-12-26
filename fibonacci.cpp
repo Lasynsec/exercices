@@ -2,6 +2,7 @@
 #include <math.h>
 #include <string>
 #include <ctype.h>
+#include <limits>
 
 
 using namespace std;
@@ -13,6 +14,10 @@ bool playAgain(0);
 
 int main()
 {
+
+	int askIt(0);
+	int F(0);
+	
 	do{
 		int F(0);
 		int askIt(0);
@@ -43,13 +48,14 @@ int main()
 			cin >> inputAgain;
 			cout << endl;
 
-				if(inputAgain !='n' && inputAgain != 'y'){/* must loop if the user don't put the n button*/
-					cout << " don't understand !" << endl;	
+				if(inputAgain !='n' && inputAgain != 'y'){
+					cout << "I don't understand !" << endl;	
 				}else{		
 					if(inputAgain =='y'){
 						playAgain = 1;
 					} else {
 						playAgain = 0;
+						cout << "Goodbye !!"<<endl;
 					}
 				}
 				
@@ -60,12 +66,11 @@ int main()
 }
 
 /*
-return the nth value of fiboncci.
+	calculate the nth value of fiboncci.
 */
 int Fibonacci(int n)
 {
-	if(n <= 1)
-	{
+	if(n <= 1){
 		return n;
 	}
 
@@ -73,30 +78,25 @@ int Fibonacci(int n)
 }
 
 /*
-return the user value.
+	return the user input.
 */
 int askNumber()
 {
 	int number;
 	int increment(0);
-
 	do{
-	   cout << " Write a number between 0 and 40 !! : ";
-	   cin >> number;
-	   cout << endl;
+	   cout << "Write a number between 0 and 40 !! : ";
 
-	   if(number < 1)
-	   {
-	   	cout << " The number must be greater than 0 " << endl;	
+	   if(!(cin >> number)){
+			cout << "Please enter numbers only"<< endl;
+			cin.clear();
+			cin.ignore(1000,'\n');
+	   }else if(number < 1){
+	   	cout << "The number must be greater than 0 " << endl;	
 	   } else if(number > 40){
-	   	cout << " The number must be less  than 41" << endl;	
+	   	cout << "The number must be less  than 41" << endl;	
 	   }
-       
-	   if(!isdigit(number)){/*Problem with the isdigit*/
-			cout << " You have to write a number !!!" << endl;
-	   }
-
-	}while(number < 1 || number > 40 || !isdigit(number)); // while number is not < 1
+	}while(number < 1 || number > 40); // while number is not < 1
 	
 	return number;
 }
