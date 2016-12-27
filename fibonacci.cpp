@@ -15,7 +15,7 @@ int main()
 	askIt = askNumber();
 	F = Fibonacci(askIt);
 
-	cout << "The " << askIt << " nth number's value is "<< F << endl;
+	cout << "The " << askIt << "th number of fibonacci is "<< F << endl;
 	return 0;
 }
 
@@ -48,9 +48,11 @@ int askNumber()
 	   if(number < 1)
 	   {
 	   	cout << " The number must be greater than 0 " << endl;	
+	   } else if(number > 40){
+	   	cout << " The number must be under 40 " << endl;	
 	   }
        
-	}while(number < 1); // while number is not < 1
+	}while(number < 1 || number > 40); // while number is not < 1
 	
 	return number;
 }
