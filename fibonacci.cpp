@@ -62,10 +62,6 @@ int main()
 		}while(inputAgain != 'y' && inputAgain != 'n');
 	}while(playAgain == 1);
 
-<<<<<<< HEAD
-	cout << "The " << askIt << "th number of fibonacci is "<< F << endl;
-=======
->>>>>>> 83ec3887e9d23a039bed988d3c0c2e896b6ab67a
 	return 0;
 }
 
@@ -90,16 +86,6 @@ int askNumber()
 	int increment(0);
 	do{
 	   cout << "Write a number between 0 and 40 !! : ";
-
-<<<<<<< HEAD
-	   if(number < 1)
-	   {
-	   	cout << " The number must be greater than 0 " << endl;	
-	   } else if(number > 40){
-	   	cout << " The number must be under 40 " << endl;	
-	   }
-       
-=======
 	   if(!(cin >> number)){
 			cout << "Please enter numbers only"<< endl;
 			cin.clear();
@@ -109,7 +95,6 @@ int askNumber()
 	   } else if(number > 40){
 	   	cout << "The number must be less  than 41" << endl;	
 	   }
->>>>>>> 83ec3887e9d23a039bed988d3c0c2e896b6ab67a
 	}while(number < 1 || number > 40); // while number is not < 1
 	
 	return number;
