@@ -56,7 +56,7 @@ int vectorsSize(int const N_MAX){
 		if(!(cin>>userInput)){
 			cout << "Please enter numbers only"<< endl;
 			cin.clear(); 
-			cin.ignore(100,'\n');
+			cin.ignore(1000,'\n');
 		}else if(userInput < 1){
 			cout << "Your number must be greater than 1"<< endl;
 		} else if(userInput > N_MAX){
@@ -71,10 +71,13 @@ int vectorsSize(int const N_MAX){
  * @param: the vector in which to push elements in.
  */
 int pushElements(vector<int>& vec){
-
 	for(size_t i(0); i < vec.size(); i++){
 		cout << " type the element number " << i << " : ";
-		cin>>vec[i];
-		cout << endl;
+		if(!(cin>>vec[i])){
+			cout << "Please enter numbers only for "<<i<<" : ";
+			cin.clear(); 
+			cin.ignore(1000,'\n');
+			cin>>vec[i];
+	    }
 	}
 }
