@@ -10,6 +10,7 @@ int dimensions();
 void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
+vector<vector<double>> multiplyMatrixes(vector<vector<int>>M1,vector<vector<int>>M2);
 
 int main()
 {
@@ -45,7 +46,8 @@ int main()
 }
 
 /*
-*
+* Ask the user to type the dimensions of the two matrices.
+* @return the dimensions. 
 */
 int dimensions(){
 	int dimension(0);
@@ -58,7 +60,8 @@ int dimensions(){
 }
 
 /*
-*
+* Loop through the matrices and display his content.
+* @param: the matrix to loop in and the number to the matrix M1 or M2.
 */
 void matrixReader(vector<vector<int>> M, int which){
 	cout << "The matrix number " << which << endl;
@@ -70,15 +73,16 @@ void matrixReader(vector<vector<int>> M, int which){
 	}	
 }
 
-/*
-*
+/**
+ * display a message to the user based on the matrix number.
 */
 void askHim(string &matrix,int  nbr){
 	cout << " Type a number of "<< matrix << " for the matrix number "<< nbr <<" : ";
 }
 
 /**
-*
+* Insert elements in each matrix.
+* @param: the reference of a matrix in which to insert elements.   
 */
 void insertMatrixValues(vector<vector<int>>& M){
 	int incrementable(1);
@@ -88,4 +92,13 @@ void insertMatrixValues(vector<vector<int>>& M){
 			cin>>M[i][j];
 		}
 	}
+}
+
+/**
+* Multiply ...
+*@param: ....
+*@return: ...
+*/
+vector<vector<double>> multiplyMatrixes(vector<vector<int>>M1,vector<vector<int>>M2){
+
 }
