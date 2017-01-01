@@ -7,7 +7,7 @@ using namespace std;
 
 //prototypes
 int dimensions();
-void insertMatrixValues(vector<vector<int>>M);
+void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
 
@@ -25,6 +25,7 @@ int main()
 	askHim(column,1);
 	numberOfColumn = dimensions();
 	vector<vector<int>> M1(numberOfColumn, vector<int>(numberOfRow));
+	insertMatrixValues(M1);
 	cout << endl;
 
 	/*second matrix*/
@@ -34,7 +35,8 @@ int main()
 	askHim(column,2);
 	numberOfColumn = dimensions();
 	vector<vector<int>> M2(numberOfColumn, vector<int>(numberOfRow));
-	
+	insertMatrixValues(M2);
+
 	/*Read the matrixes*/
 	matrixReader(M1,1);
 	matrixReader(M2,2);	
@@ -78,6 +80,12 @@ void askHim(string &matrix,int  nbr){
 /**
 *
 */
-insertMatrixValues(vector<vector<int>>&M){
-
+void insertMatrixValues(vector<vector<int>>& M){
+	int incrementable(1);
+	for(size_t i(0); i < M.size(); i++){
+		for(size_t j(0);j < M[i].size(); j++){
+		cout << " Put a value in the index " << incrementable++ << " : ";
+			cin>>M[i][j];
+		}
+	}
 }
