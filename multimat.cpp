@@ -10,7 +10,7 @@ int dimensions();
 void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
-vector<vector<double>> multiplyMatrixes(vector<vector<int>>M1,vector<vector<int>>M2);
+vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
 
 int main()
 {
@@ -18,6 +18,7 @@ int main()
 	string column = "column";
 	int numberOfRow;
 	int numberOfColumn;
+	vector<vector<int>> result;
 
 	/*first matrix*/
 	askHim(row,1);
@@ -25,7 +26,7 @@ int main()
 	
 	askHim(column,1);
 	numberOfColumn = dimensions();
-	vector<vector<int>> M1(numberOfColumn, vector<int>(numberOfRow));
+	vector<vector<int>> M1(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M1);
 	cout << endl;
 
@@ -35,12 +36,16 @@ int main()
 	
 	askHim(column,2);
 	numberOfColumn = dimensions();
-	vector<vector<int>> M2(numberOfColumn, vector<int>(numberOfRow));
+	vector<vector<int>> M2(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M2);
 
 	/*Read the matrixes*/
 	matrixReader(M1,1);
-	matrixReader(M2,2);	
+	matrixReader(M2,2);
+	
+
+	/*Mutliply matrices*/
+    result = multiplyMatrices(M1,M2);
 
 	return 0;
 }
@@ -88,7 +93,7 @@ void insertMatrixValues(vector<vector<int>>& M){
 	int incrementable(1);
 	for(size_t i(0); i < M.size(); i++){
 		for(size_t j(0);j < M[i].size(); j++){
-		cout << " Put a value in the index " << incrementable++ << " : ";
+		cout << " Put a value in the index " << incrementable++ << " of your matrix: ";
 			cin>>M[i][j];
 		}
 	}
@@ -99,6 +104,19 @@ void insertMatrixValues(vector<vector<int>>& M){
 *@param: ....
 *@return: ...
 */
-vector<vector<double>> multiplyMatrixes(vector<vector<int>>M1,vector<vector<int>>M2){
+vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
+	vector<vector<int>> result;
+	int nbrOfColumn(0);
+	int nbrOfLine(0);
 
+	nbrOfLine = M1.size();
+	nbrOfColumn = M1[0].size();
+	cout <<" The Matrix M1 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
+	
+	nbrOfLine = 0;
+
+	nbrOfLine = M2.size();
+	nbrOfColumn = M2[0].size();
+	cout <<" The Matrix M2 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
+	return result;
 }
