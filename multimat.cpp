@@ -109,14 +109,18 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 	int nbrOfColumn(0);
 	int nbrOfLine(0);
 
-	nbrOfLine = M1.size();
+//	nbrOfLine = M1.size();
 	nbrOfColumn = M1[0].size();
-	cout <<" The Matrix M1 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
+//	cout <<" The Matrix M1 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
 	
-	nbrOfLine = 0;
+//	nbrOfLine = 0;
 
 	nbrOfLine = M2.size();
-	nbrOfColumn = M2[0].size();
-	cout <<" The Matrix M2 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
+//	nbrOfColumn = M2[0].size();
+//	cout <<" The Matrix M2 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
+
+	if(nbrOfLine != nbrOfColumn){
+		cout <<"The number of column of M1 must be equal to the number of row of M2" <<endl;
+	}
 	return result;
 }
