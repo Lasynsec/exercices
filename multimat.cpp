@@ -46,6 +46,13 @@ int main()
 
 	/*Mutliply matrices*/
     result = multiplyMatrices(M1,M2);
+	cout << "The result of the multiplication is : " << endl;
+	for(auto row : result){
+		for(auto element : row){
+			cout << element << " ";
+		}
+		cout << endl;
+	}
 
 	return 0;
 }
@@ -100,27 +107,39 @@ void insertMatrixValues(vector<vector<int>>& M){
 }
 
 /**
-* Multiply ...
-*@param: ....
-*@return: ...
+* Multiplication of  two matrices
+*@param:  reiceve two mutlidimensionals vectors
+*@return: return a multidimensional vector as result. 
 */
 vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 	vector<vector<int>> result;
+	vector<int> row;
+	int sumRow(0);
+	int col(0);
+	int line(0);
 	int nbrOfColumn(0);
 	int nbrOfLine(0);
 
-//	nbrOfLine = M1.size();
 	nbrOfColumn = M1[0].size();
-//	cout <<" The Matrix M1 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
-	
-//	nbrOfLine = 0;
-
 	nbrOfLine = M2.size();
-//	nbrOfColumn = M2[0].size();
-//	cout <<" The Matrix M2 has " << nbrOfLine << " lines and " <<nbrOfColumn <<" columns " << endl;
 
 	if(nbrOfLine != nbrOfColumn){
-		cout <<"The number of column of M1 must be equal to the number of row of M2" <<endl;
+		cout <<"The number of column of M1 must be equal to the number of row of M2";
+		cout <<"Sorry but we cannot proceed to the multiplication..."<<endl;
+	} else {
+		for(size_t i(0); i < M1.size(); i++){
+			for(size_t j(0);j < M1[i].size(); j++){
+				sumRow += M1[i][j] * M2[line][col];
+				++line;
+				cout << sumRow << " =  The multiplication "<<M1[i][j] << " * "<< M2[i][col] <<endl;
+			}
+
+			row.push_back(sumRow);
+			sumRow = 0;
+			line = 0;
+			++col;
+			result.push_back(row);
+		}	
 	}
 	return result;
 }
