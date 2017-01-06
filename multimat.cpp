@@ -14,13 +14,13 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>>
 
 int main()
 {
-	string row = "row";
+/*	string row = "row";
 	string column = "column";
 	int numberOfRow;
-	int numberOfColumn;
+	int numberOfColumn;*/
 	vector<vector<int>> result;
-
-	/*first matrix*/
+/*
+//	first matrix
 	askHim(row,1);
 	numberOfRow = dimensions();
 	
@@ -30,7 +30,7 @@ int main()
 	insertMatrixValues(M1);
 	cout << endl;
 
-	/*second matrix*/
+//	second matrix
 	askHim(row,2);
 	numberOfRow = dimensions();
 	
@@ -39,17 +39,31 @@ int main()
 	vector<vector<int>> M2(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M2);
 
-	/*Read the matrixes*/
+//	Read the matrixes
 	matrixReader(M1,1);
 	matrixReader(M2,2);
 	
 
-	/*Mutliply matrices*/
-    result = multiplyMatrices(M1,M2);
-	cout << "The result of the multiplication is : " << endl;
-	for(auto row : result){
-		for(auto element : row){
-			cout << element << " ";
+//	Mutliply matrices */
+
+   vector<vector<int>> M1(
+	{
+		{1,7},
+		{2,4}
+	}
+   );
+
+   vector<vector<int>> M2(
+	{
+		{3,3},
+		{5,2}
+	}
+   );
+
+   result = multiplyMatrices(M1,M2);
+   for(size_t i(0); i < result.size(); i++){
+		for(size_t j(0); j < result[i].size(); j++){
+			cout << result[i][j] << " ";
 		}
 		cout << endl;
 	}
@@ -119,6 +133,7 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 	int line(0);
 	int nbrOfColumn(0);
 	int nbrOfLine(0);
+	int sizeRow(0);
 
 	nbrOfColumn = M1[0].size();
 	nbrOfLine = M2.size();
@@ -127,19 +142,40 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 		cout <<"The number of column of M1 must be equal to the number of row of M2";
 		cout <<"Sorry but we cannot proceed to the multiplication..."<<endl;
 	} else {
-		for(size_t i(0); i < M1.size(); i++){
-			for(size_t j(0);j < M1[i].size(); j++){
-				sumRow += M1[i][j] * M2[line][col];
-				++line;
-				cout << sumRow << " =  The multiplication "<<M1[i][j] << " * "<< M2[i][col] <<endl;
-			}
-
+	    for(size_t i(0); i < M1.size(); i++){
+				for(size_t j(0);j < M1[i].size(); j++){
+					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
+					sumRow += M1[i][j] * M2[line][col];
+					++line;
+				}
 			row.push_back(sumRow);
 			sumRow = 0;
 			line = 0;
 			++col;
-			result.push_back(row);
-		}	
-	}
+		}
+	result.push_back(row);
+    
+	line = 1;
+	col = 1;
+	  /*for(size_t i(0); i < M1.size(); i++){
+				for(int j = M1[i].size() - 1;j >= 0; j--){
+					cout << M1[i][j] * M2[line][col]<<" = " <<" [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
+					sumRow += M1[i][j] * M2[line][col];
+					cout << " Here the total is : "<< sumRow << endl;
+					--line;
+					if(line < 0){
+						line = 0;	
+					}
+				}
+			cout << " Here we insert " << sumRow << endl;
+			row.push_back(sumRow);
+			sumRow = 0;
+			++line;
+		    --col;
+	 }
+	
+	result.push_back(row);*/
 	return result;
+
+  }
 }
