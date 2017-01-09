@@ -142,6 +142,8 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 		cout <<"The number of column of M1 must be equal to the number of row of M2";
 		cout <<"Sorry but we cannot proceed to the multiplication..."<<endl;
 	} else {
+		int incrementCol(0);
+		do{
 	    for(size_t i(0); i < M1.size(); i++){
 				for(size_t j(0);j < M1[i].size(); j++){
 					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
@@ -151,13 +153,16 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 			row.push_back(sumRow);
 			sumRow = 0;
 			line = 0;
-			++col;
-		}
-	result.push_back(row);
-    
+			//++col;
+			++incrementCol;
+		};
+
+		}while(incrementCol <= M2[0].size());
+		result.push_back(row);
+   /* 
 	line = 1;
 	col = 1;
-	  /*for(size_t i(0); i < M1.size(); i++){
+	  for(size_t i(0); i < M1.size(); i++){
 				for(int j = M1[i].size() - 1;j >= 0; j--){
 					cout << M1[i][j] * M2[line][col]<<" = " <<" [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
 					sumRow += M1[i][j] * M2[line][col];
