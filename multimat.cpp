@@ -143,7 +143,7 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 		cout <<"Sorry but we cannot proceed to the multiplication..."<<endl;
 	} else {
 		int incrementCol(0);
-		do{
+	    do{
 	    for(size_t i(0); i < M1.size(); i++){
 				for(size_t j(0);j < M1[i].size(); j++){
 					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
@@ -153,33 +153,12 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 			row.push_back(sumRow);
 			sumRow = 0;
 			line = 0;
-			//++col;
 			++incrementCol;
 		};
+		++col;
+	    }while(incrementCol <= M2[0].size());
+		result.push_back(row); 
 
-		}while(incrementCol <= M2[0].size());
-		result.push_back(row);
-   /* 
-	line = 1;
-	col = 1;
-	  for(size_t i(0); i < M1.size(); i++){
-				for(int j = M1[i].size() - 1;j >= 0; j--){
-					cout << M1[i][j] * M2[line][col]<<" = " <<" [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
-					sumRow += M1[i][j] * M2[line][col];
-					cout << " Here the total is : "<< sumRow << endl;
-					--line;
-					if(line < 0){
-						line = 0;	
-					}
-				}
-			cout << " Here we insert " << sumRow << endl;
-			row.push_back(sumRow);
-			sumRow = 0;
-			++line;
-		    --col;
-	 }
-	
-	result.push_back(row);*/
 	return result;
 
   }
