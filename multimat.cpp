@@ -163,3 +163,9 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 
   }
 }
+
+/**
+* function split vector to several sub vectors.
+*
+*/
+
