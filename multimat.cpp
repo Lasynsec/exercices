@@ -10,8 +10,8 @@ int dimensions();
 void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
-vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
-
+vector<int> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
+vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two_size);
 int main()
 {
 /*	string row = "row";
@@ -59,9 +59,13 @@ int main()
 		{5,2}
 	}
    );
+	
+	
+   vector<int>result_two_dim;
+   result_two_dim = multiplyMatrices(M1,M2);
 
-   result = multiplyMatrices(M1,M2);
-   for(size_t i(0); i < result.size(); i++){
+	
+   for(size_t i(0); i < result_two_dim.size(); i++){
 		for(size_t j(0); j < result[i].size(); j++){
 			cout << result[i][j] << " ";
 		}
@@ -125,8 +129,7 @@ void insertMatrixValues(vector<vector<int>>& M){
 *@param:  reiceve two mutlidimensionals vectors
 *@return: return a multidimensional vector as result. 
 */
-vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
-	vector<vector<int>> result;
+vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 	vector<int> row;
 	int sumRow(0);
 	int col(0);
@@ -157,15 +160,30 @@ vector<vector<int>> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>
 		};
 		++col;
 	    }while(incrementCol <= M2[0].size());
-		result.push_back(row); 
+		//result.push_back(row); 
 
-	return result;
-
+	return row;
+	}
   }
-}
 
 /**
-* function split vector to several sub vectors.
+* function splits vector to several sub vectors.
 *
 */
+vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two){
+	vector<vector<int>> result;
 
+	int length = arrayToSplit / matrix_two.size();
+	int remain = arrayToSplit % matrix_two.size();
+
+	int begin = 0;
+	int end = 0;
+
+	for(size_T i(0); i < min(matrix_two.size(), arrayToSplit.size(); i++); {
+		end += (remain > O)	? (length + !!(remain)) : length;
+
+	result.push_back(vector<10>(arrayToSplit.begin + begin,		matrix_.begin + end;);
+	begin = end;
+	}
+	return result;	
+}
