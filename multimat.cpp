@@ -11,7 +11,7 @@ void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
 vector<int> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
-vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two_size);
+vector<vector<int>>splitArray(vector<int> arrayToSplit, vector<int> matrix_two_size);
 int main()
 {
 /*	string row = "row";
@@ -170,20 +170,19 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 * function splits vector to several sub vectors.
 *
 */
-vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two){
+vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_two){
 	vector<vector<int>> result;
 
-	int length = arrayToSplit / matrix_two.size();
-	int remain = arrayToSplit % matrix_two.size();
+	int length = arrayToSplit.size() / matrix_two;
+	int remain = arrayToSplit.size() % matrix_two;
 
 	int begin = 0;
 	int end = 0;
 
-	for(size_T i(0); i < min(matrix_two.size(), arrayToSplit.size(); i++); {
-		end += (remain > O)	? (length + !!(remain)) : length;
-
-	result.push_back(vector<10>(arrayToSplit.begin + begin,		matrix_.begin + end;);
-	begin = end;
+	for(int i(0); i < fmin(matrix_two, arrayToSplit.size()); i++){
+		end += (remain > 0)	? (length + !!(remain)) : length;
+		result.push_back(vector<int>(arrayToSplit.begin() + begin, arrayToSplit.begin() + end));
+		begin = end;
 	}
 	return result;	
 }
