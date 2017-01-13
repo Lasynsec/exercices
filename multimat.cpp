@@ -11,7 +11,7 @@ void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
 vector<int> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
-vector<vector<int>>splitArray(vector<int> arrayToSplit, vector<int> matrix_two_size);
+vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two);
 int main()
 {
 /*	string row = "row";
@@ -64,13 +64,21 @@ int main()
    vector<int>result_two_dim;
    result_two_dim = multiplyMatrices(M1,M2);
 
-	
+   int sizeM2(0);
+   sizeM2 = M2[0].size();	
+   splitArray(result_two_dim, sizeM2);
+
    for(size_t i(0); i < result_two_dim.size(); i++){
 		for(size_t j(0); j < result[i].size(); j++){
 			cout << result[i][j] << " ";
 		}
 		cout << endl;
 	}
+	
+	/*for(auto element : result_two_dim){
+		cout << element << ", ";
+	  }
+	cout << endl;*/
 
 	return 0;
 }
