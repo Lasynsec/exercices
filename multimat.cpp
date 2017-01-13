@@ -11,15 +11,15 @@ void insertMatrixValues(vector<vector<int>>& M);
 void matrixReader(vector<vector<int>> M, int which);
 void askHim(string &matrix,int nbr);
 vector<int> multiplyMatrices(vector<vector<int>> &M1,vector<vector<int>> &M2);
-vector<vector<int>>splitArray(vector<int> arrayToSplit, int matrix_two);
+vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_size);
 int main()
 {
-/*	string row = "row";
+	string row = "row";
 	string column = "column";
 	int numberOfRow;
-	int numberOfColumn;*/
+	int numberOfColumn;
 	vector<vector<int>> result;
-/*
+
 //	first matrix
 	askHim(row,1);
 	numberOfRow = dimensions();
@@ -44,9 +44,9 @@ int main()
 	matrixReader(M2,2);
 	
 
-//	Mutliply matrices */
+//	Mutliply matrices
 
-   vector<vector<int>> M1(
+/*   vector<vector<int>> M1(
 	{
 		{1,7},
 		{2,4}
@@ -59,26 +59,24 @@ int main()
 		{5,2}
 	}
    );
-	
+*/	
 	
    vector<int>result_two_dim;
    result_two_dim = multiplyMatrices(M1,M2);
 
    int sizeM2(0);
-   sizeM2 = M2[0].size();	
-   splitArray(result_two_dim, sizeM2);
+   sizeM2 = M2[0].size();
+	
+  result =  splitArray(result_two_dim, sizeM2);
 
-   for(size_t i(0); i < result_two_dim.size(); i++){
+   for(size_t i(0); i < result.size(); i++){
 		for(size_t j(0); j < result[i].size(); j++){
 			cout << result[i][j] << " ";
 		}
 		cout << endl;
 	}
 	
-	/*for(auto element : result_two_dim){
-		cout << element << ", ";
-	  }
-	cout << endl;*/
+	cout << endl;
 
 	return 0;
 }
@@ -157,7 +155,7 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 	    do{
 	    for(size_t i(0); i < M1.size(); i++){
 				for(size_t j(0);j < M1[i].size(); j++){
-					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
+					//cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
 					sumRow += M1[i][j] * M2[line][col];
 					++line;
 				}
@@ -178,16 +176,16 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 * function splits vector to several sub vectors.
 *
 */
-vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_two){
+vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_size){
 	vector<vector<int>> result;
 
-	int length = arrayToSplit.size() / matrix_two;
-	int remain = arrayToSplit.size() % matrix_two;
+	int length = arrayToSplit.size() / matrix_size;
+	int remain = arrayToSplit.size() % matrix_size;
 
 	int begin = 0;
 	int end = 0;
 
-	for(int i(0); i < fmin(matrix_two, arrayToSplit.size()); i++){
+	for(int i(0); i < fmin(matrix_size, arrayToSplit.size()); i++){
 		end += (remain > 0)	? (length + !!(remain)) : length;
 		result.push_back(vector<int>(arrayToSplit.begin() + begin, arrayToSplit.begin() + end));
 		begin = end;
