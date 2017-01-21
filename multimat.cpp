@@ -51,16 +51,16 @@ int main()
 	
 
 //	Mutliply matrices
-   vector<vector<int>> M1(
+    vector<vector<int>> M1(
 	{
-		{1,2,3},
+        {1,2,3},
 		{4,5,6}
 //		{1,7},
 //		{2,4}
 	}
    );
 
-   vector<vector<int>> M2(
+    vector<vector<int>> M2(
 	{
 		{1,2,3,4},
 		{5,6,7,8},
@@ -79,7 +79,7 @@ int main()
 	}
 	cout << endl;
 
-/* comment for the split functions start here
+
    int sizeM2(0);
    sizeM2 = M2[0].size(); // get the column size of vector two.
 	
@@ -93,7 +93,7 @@ int main()
 	}
 	
 	cout << endl;
-*/ 
+
 	return 0;
 }
 
@@ -171,7 +171,7 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 	    do{ // we start the while loop here.
 	    for(size_t i(0); i < M1.size(); i++){ // 
 				for(size_t j(0);j < M1[i].size(); j++){
-					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
+					cout << " [ "<< i << "-"<< j << " ] " << M1[i][j] << " * " << " [ " << i << "-"<< j << " ] " << M2[line][col] << endl;
 					sumRow += M1[i][j] * M2[line][col];
 					++line;
 				}
@@ -181,9 +181,9 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 		};
 		++incrementCol;
 		++col;
-		cout << " col is "<<col << endl;
+		cout << " col is " << col << endl;
 		cout << " M2 number of column is  "<< M2[0].size() << endl;
-		cout << " incrementCol is  "<< incrementCol << endl;
+		cout << " incrementCol is  " << incrementCol << endl;
 	    }while(incrementCol < M2[0].size());
 		//result.push_back(row); 
 
@@ -200,18 +200,21 @@ vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_size){
 	vector<vector<int>> result;												// the empty multi vector for the result.
 	//cout <<"Array split : "<< arrayToSplit.size()<< endl;					
 	//cout <<"matrix two column size  : "<<  matrix_size << endl;
-	int length = arrayToSplit.size() / matrix_size;							//  
-	int remain = arrayToSplit.size() % matrix_size;
-	//int length = matrix_size;
-	//int remain = 0;
-	cout << "the reulst of arraySplit divided by matrix_size is : " << length << endl;
+	//int length = arrayToSplit.size() / matrix_size;							//  
+	//int remain = arrayToSplit.size() % matrix_size;
+	int length = matrix_size;
+	int remain = 0;
+	//cout << "the size of matrix_size is  " << matrix_size << endl;
 	int begin = 0;
 	int end = 0;
-
-	for(int i(0); i < fmin(matrix_size, arrayToSplit.size()); i++){
-		end += (remain > 0)	? (length + !!(remain)) : length;
+	int matrixLength(0);
+	matrixLength = (matrix_size / 2) < 2 ? matrix_size : (matrix_size / 2);
+	for(int i(0); i < matrixLength; i++){
+		end +=  length;
+		//cout << "End : " << end << endl;
 		result.push_back(vector<int>(arrayToSplit.begin() + begin, arrayToSplit.begin() + end));
 		begin = end;
+		//cout << "begin "<< begin << endl;
 	}
 	return result;	
 }
