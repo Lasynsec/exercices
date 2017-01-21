@@ -21,45 +21,50 @@ int main()
 	vector<vector<int>> result;
 
 //	first matrix
-	askHim(row,1);
+/*	askHim(row,1);
 	numberOfRow = dimensions();
 	
 	askHim(column,1);
 	numberOfColumn = dimensions();
 	vector<vector<int>> M1(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M1);
-	cout << endl;
+	cout << endl;*/
 
 //	second matrix
-	askHim(row,2);
+/*	askHim(row,2);
 	numberOfRow = dimensions();
 	
 	askHim(column,2);
 	numberOfColumn = dimensions();
 	vector<vector<int>> M2(numberOfRow, vector<int>(numberOfColumn));
-	insertMatrixValues(M2);
+	insertMatrixValues(M2);*/
 
 //	Read the matrixes
-	matrixReader(M1,1);
-	matrixReader(M2,2);
+/*	matrixReader(M1,1);
+	matrixReader(M2,2);*/
 	
 
 //	Mutliply matrices
 
-/*   vector<vector<int>> M1(
+   vector<vector<int>> M1(
 	{
-		{1,7},
-		{2,4}
+		{1,2,3},
+		{4,5,6}
+//		{1,7},
+//		{2,4}
 	}
    );
 
    vector<vector<int>> M2(
 	{
-		{3,3},
-		{5,2}
+		{1,2,3,4},
+		{5,6,7,8},
+		{9,0,1,2}
+//		{3,3},
+//		{5,2}
 	}
    );
-*/	
+	
 	
    vector<int>result_two_dim;
    result_two_dim = multiplyMatrices(M1,M2);
@@ -148,14 +153,14 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 	nbrOfLine = M2.size();
 
 	if(nbrOfLine != nbrOfColumn){
-		cout <<"The number of column of M1 must be equal to the number of row of M2";
+		cout <<"The number of column of M1 must be equal to the number of row of M2 "<<endl;
 		cout <<"Sorry but we cannot proceed to the multiplication..."<<endl;
 	} else {
 		int incrementCol(0);
 	    do{
 	    for(size_t i(0); i < M1.size(); i++){
 				for(size_t j(0);j < M1[i].size(); j++){
-					//cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
+					cout << " [ "<< i << "-"<< j << " ] "<< M1[i][j] << " * " <<" [ "<< i << "-"<< j << " ] "<< M2[line][col] << endl;
 					sumRow += M1[i][j] * M2[line][col];
 					++line;
 				}
@@ -177,11 +182,15 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 *
 */
 vector<vector<int>>splitArray(vector<int>& arrayToSplit, int matrix_size){
-	vector<vector<int>> result;
-
-	int length = arrayToSplit.size() / matrix_size;
-	int remain = arrayToSplit.size() % matrix_size;
-
+	cout << "The result is :"<< endl; // Display the sentence on screen.
+	vector<vector<int>> result; // the multi vector for the result.
+	cout <<"Array split : "<< arrayToSplit.size()<< endl;
+	cout <<"matrix size  : "<<  matrix_size << endl;
+	//int length = arrayToSplit.size() / matrix_size;  
+	//int remain = arrayToSplit.size() % matrix_size;
+	int length = matrix_size;
+	int remain = 0;
+	cout << "the reulst of arraySplit divided by matrix_size is : " << length << endl;
 	int begin = 0;
 	int end = 0;
 
