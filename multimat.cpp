@@ -81,13 +81,10 @@ int main()
 	}
 	cout << endl;
 
-<<<<<<< HEAD
 
-=======
 /**
 * Split part
 */
->>>>>>> matrix-multiplyFunction
    int sizeM2(0);
    sizeM2 = M2[0].size(); // get the column size of vector two.
 	
