@@ -21,7 +21,7 @@ int main()
 	vector<vector<int>> result;
 
 //	first matrix
-
+/*
 	askHim(row,1);
 	numberOfRow = dimensions();
 	
@@ -30,10 +30,10 @@ int main()
 	vector<vector<int>> M1(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M1);
 	cout << endl;
-
+*/
 
 //	second matrix
-	
+/*	
 	askHim(row,2);
 	numberOfRow = dimensions();
 	
@@ -41,15 +41,15 @@ int main()
 	numberOfColumn = dimensions();
 	vector<vector<int>> M2(numberOfRow, vector<int>(numberOfColumn));
 	insertMatrixValues(M2);
-
+*/
 
 //	Read the matrixes
-	
+/*	
 	matrixReader(M1,1);
 	matrixReader(M2,2);
-
+*/
 	
-/*
+
 //	Mutliply matrices
     vector<vector<int>> M1(
 	{
@@ -69,10 +69,8 @@ int main()
 //		{5,2}
 	}
    );
-*/	
-/*
-* Multiplication part
-*/
+	
+	
    vector<int>result_two_dim;
    result_two_dim = multiplyMatrices(M1,M2);
 	cout << " list of elements : ";
@@ -81,9 +79,7 @@ int main()
 	}
 	cout << endl;
 
-/**
-* Split part
-*/
+
    int sizeM2(0);
    sizeM2 = M2[0].size(); // get the column size of vector two.
 	
@@ -189,16 +185,9 @@ vector<int> multiplyMatrices(vector<vector<int>> &M1, vector<vector<int>> &M2){
 		cout << " M2 number of column is  "<< M2[0].size() << endl;
 		cout << " incrementCol is  " << incrementCol << endl;
 	    }while(incrementCol < M2[0].size());
-	
-		vector<int> result_row;
-		for(size_t i(0); i < row.size(); i += 2){
-			result_row.push_back(row[i]);
-		}
+		//result.push_back(row); 
 
-		for(size_t i(1); i < row.size(); i += 2){
-			result_row.push_back(row[i]);
-		}
-	return result_row;
+	return row;
 	}
   }
 
