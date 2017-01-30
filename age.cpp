@@ -1,3 +1,7 @@
+/**
+*	The program ask for the user age and return the user birth year.
+*/
+
 #include <iostream>
 using namespace std;
 
