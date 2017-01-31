@@ -1,3 +1,6 @@
+/**
+* The programs gives to the user the good quantity of ingredient for a fondue.  
+*/
 #include <iostream>
 using namespace std;
 
@@ -22,5 +25,6 @@ int main()
 	cout << "- " << water << " :dl of water" << endl;
 	cout << "- " << garlic << " :clove of garlic" << endl;
 	cout << "- " << bread << " :gr of bread" << endl;
+
 	return 0;
 }
