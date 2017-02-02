@@ -100,6 +100,10 @@ Result multiplication(Complex& z1, Complex& z2, Result& z)
 	return z;
 	
 }
+
+/**
+ *
+ */
 void display(Result const& z)
 {
 	cout << "(" << z.reel << ", " << z.imagin << ")"<< endl;
