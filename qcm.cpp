@@ -35,6 +35,9 @@ void display(Qcm const& qcm){
 	}
 }
 
+/*
+ * Ask for the answer to the user.
+ */
 int askNumber(int min, int max){
 	int userInput;
 	do{
@@ -56,14 +59,20 @@ int askQuestions(Qcm& qcm){
 	getline(cin,qcm.question);
 	
 	cout<<"How many answers the users will have ? "<<endl;
-	int nbr_questions(0);
-	cin>>nbr_questions;
+	int nbr_questions;
+	while(!(cin>>nbr_questions)){
+		cout << "Please enter numbers only !!!"<< endl;
+		cin.clear();
+		cin.ignore();
+	}
 	
 	string actualValue;
 	for(size_t i(0); i < nbr_questions; ++i){
 		cout << "Enter the answer number "<< i <<" : ";
-		cin>>actualValue;
+		cin.ignore();
+		getline(cin,actualValue);
 		qcm.answers.push_back(actualValue);
+		
 	}
 	cout << endl;
 	
