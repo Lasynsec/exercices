@@ -14,13 +14,16 @@ struct Qcm{
 //Prototypes
 void display(Qcm const& qcm);
 int askNumber(int min, int max);
-int askQuestions(Qcm& qcm);
+Qcm askQuestions();
+Qcm testQuestions();
+int examCreator();
+
+//Typedef
+typedef vector<Qcm> Exam; // A new type Exam that contain qcm elements.
 
 int main(){
-	Qcm qcm;	
+	examCreator();
 	
-	askQuestions(qcm);
-
 	return 0;
 }
 
@@ -53,9 +56,14 @@ int askNumber(int min, int max){
 
 	return userInput;
 }
-	
-int askQuestions(Qcm& qcm){
+
+/*
+ * Ask the questions to the users.
+ */
+Qcm askQuestions(){
+	Qcm qcm;
 	cout<<"Write the question."<<endl;
+	cin.ignore();
 	getline(cin,qcm.question);
 	
 	cout<<"How many answers the users will have ? "<<endl;
@@ -76,10 +84,31 @@ int askQuestions(Qcm& qcm){
 	}
 	cout << endl;
 	
-	display(qcm);
+	//display(qcm);
 	
-	int userInput(0);
-	userInput = askNumber(1,qcm.answers.size());
+	//int userInput(0);
+	//userInput = askNumber(1,qcm.answers.size());
 
-	return userInput;
+	return qcm;
 }
+
+
+/*
+ * Create the exam
+ */
+int examCreator(){
+	cout << "How many questions will the exam have ? "<< endl;
+	int nbrQuestions;
+	cin >> nbrQuestions;
+	cout << "The number of question is "<<nbrQuestions << endl;	
+	Exam anExam(nbrQuestions);
+	
+	cout << "Vector size "<< anExam.size()<<endl;
+	for(size_t i(0); i < anExam.size(); ++i){
+		//cout << "Write the question number  " << i+1 << endl;
+		anExam[i]=askQuestions();
+	
+		cout << " la question est "<< anExam[i].question << endl;
+	}
+}
+
