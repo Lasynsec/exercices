@@ -11,35 +11,43 @@ struct Qcm{
 	int solution;
 };
 
-//Prototypes
-void display(Qcm const& qcm);
-int askNumber(int min, int max);
-Qcm askQuestions();
-Qcm testQuestions();
-int examCreator();
-
 //Typedef
 typedef vector<Qcm> Exam; // A new type Exam that contain qcm elements.
 
+//Prototypes
+void displayExam(Exam const& exam);
+int askNumber(int min, int max);
+Qcm askQuestions();
+Exam examCreator();
+
+
 int main(){
-	examCreator();
-	
+	Exam theExam;
+
+	theExam = examCreator();
+	displayExam(theExam);
+
 	return 0;
 }
 
 /*
  * Display the questions
  */
-void display(Qcm const& qcm){
-	cout << qcm.question<< endl;
-
-	for(auto row : qcm.answers){
-		cout <<" -" << row << endl;
+void displayExam(Exam const& exam){
+	cout << "Multiple Choice Questions" << endl;
+	int userInput(0);
+	for(size_t i(0); i < exam.size(); ++i){
+		cout << exam[i].question<< endl;
+		
+		for(size_t j(0); j < exam[i].answers.size(); ++j){
+			cout << j+1 <<"-"<< exam[i].answers[j] << endl;
+		}
+		askNumber(1,exam[i].answers.size());
 	}
 }
 
 /*
- * Ask for the answer to the user.
+ * Ask for the right answer to the user.
  */
 int askNumber(int min, int max){
 	int userInput;
@@ -62,32 +70,29 @@ int askNumber(int min, int max){
  */
 Qcm askQuestions(){
 	Qcm qcm;
-	cout<<"Write the question."<<endl;
 	cin.ignore();
 	getline(cin,qcm.question);
 	
-	cout<<"How many answers the users will have ? "<<endl;
+	cout<<"- How many answers the users will have ? : ";
 	int nbr_questions;
 	while(!(cin>>nbr_questions)){
-		cout << "Please enter numbers only !!!"<< endl;
+		cout << "- Please enter numbers only !!! : ";
 		cin.clear();
 		cin.ignore();
 	}
 	
 	string actualValue;
+	cin.ignore();
 	for(size_t i(0); i < nbr_questions; ++i){
-		cout << "Enter the answer number "<< i <<" : ";
-		cin.ignore();
+		cout << "- Enter the answer number "<< i+1 <<" : ";
 		getline(cin,actualValue);
 		qcm.answers.push_back(actualValue);
-		
+			
 	}
-	cout << endl;
-	
-	//display(qcm);
-	
-	//int userInput(0);
-	//userInput = askNumber(1,qcm.answers.size());
+	//cout << qcm.answers[1] << endl;
+	cout << "- The solution for this question is number : ";
+	int solution;
+	cin >> qcm.solution;
 
 	return qcm;
 }
@@ -96,19 +101,18 @@ Qcm askQuestions(){
 /*
  * Create the exam
  */
-int examCreator(){
-	cout << "How many questions will the exam have ? "<< endl;
+Exam examCreator(){
+	cout << "How many questions will the exam have (write at least 2 questions)? : ";
 	int nbrQuestions;
 	cin >> nbrQuestions;
-	cout << "The number of question is "<<nbrQuestions << endl;	
 	Exam anExam(nbrQuestions);
-	
-	cout << "Vector size "<< anExam.size()<<endl;
+
 	for(size_t i(0); i < anExam.size(); ++i){
-		//cout << "Write the question number  " << i+1 << endl;
+		cout << "Write the question number  " << i+1 << " : ";
 		anExam[i]=askQuestions();
-	
-		cout << " la question est "<< anExam[i].question << endl;
+		cout << endl;
 	}
+
+	return anExam;
 }
 
