@@ -52,13 +52,13 @@ void displayExam(Exam const& exam){
 int askNumber(int min, int max){
 	int userInput;
 	do{
-		cout << "Enter a number between "<< min << " and " << max << endl;
+		cout << "Enter a number between "<< min << " and " << max << " : ";
 		if(!(cin>>userInput)){
 			cout << "Please enter numbers only !"<< endl;
 			cin.clear();
 			cin.ignore(1000,'\n');
 		} else if(userInput < min || userInput > max){
-			cout <<"Your number must be beetwen " << min << " and "<< max << endl;
+			cout <<"Your number must be between " << min << " and "<< max << endl;
 		}
 	}while((min > userInput) || (max < userInput));
 
@@ -89,7 +89,7 @@ Qcm askQuestions(){
 		qcm.answers.push_back(actualValue);
 			
 	}
-	//cout << qcm.answers[1] << endl;
+	
 	cout << "- The solution for this question is number : ";
 	int solution;
 	cin >> qcm.solution;
