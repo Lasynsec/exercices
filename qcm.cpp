@@ -35,21 +35,20 @@ int main(){
 void displayExam(Exam const& exam){
 	cout << "Multiple Choice Questions" << endl;
 	int userInput(0);
-	int userScor;
+	int userScore(0);
 	for(size_t i(0); i < exam.size(); ++i){
 		cout << exam[i].question<< endl;
 		
 		for(size_t j(0); j < exam[i].answers.size(); ++j){
-			cout << j+1 <<"-"<< exam[i].answers[j] << endl;
+			cout <<" "<< j+1 <<"-"<< exam[i].answers[j] << endl;
 		}
 		userInput = askNumber(1,exam[i].answers.size());
 		
 		if(userInput == exam[i].solution){
-			cout << "True"<< endl;			
-		} else {
-			cout << "False"<< endl;
+			++userScore;			
 		}
 	}
+	cout <<"Your score is "<< userScore << " out of " << exam.size()<< endl;
 }
 
 /*
