@@ -20,7 +20,6 @@ int askNumber(int min, int max);
 Qcm askQuestions();
 Exam examCreator();
 
-
 int main(){
 	Exam theExam;
 
@@ -36,13 +35,20 @@ int main(){
 void displayExam(Exam const& exam){
 	cout << "Multiple Choice Questions" << endl;
 	int userInput(0);
+	int userScor;
 	for(size_t i(0); i < exam.size(); ++i){
 		cout << exam[i].question<< endl;
 		
 		for(size_t j(0); j < exam[i].answers.size(); ++j){
 			cout << j+1 <<"-"<< exam[i].answers[j] << endl;
 		}
-		askNumber(1,exam[i].answers.size());
+		userInput = askNumber(1,exam[i].answers.size());
+		
+		if(userInput == exam[i].solution){
+			cout << "True"<< endl;			
+		} else {
+			cout << "False"<< endl;
+		}
 	}
 }
 
@@ -66,7 +72,7 @@ int askNumber(int min, int max){
 }
 
 /*
- * Ask the questions to the users.
+ * Ask the questions to  users.
  */
 Qcm askQuestions(){
 	Qcm qcm;
