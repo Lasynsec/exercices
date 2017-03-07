@@ -68,11 +68,18 @@ int askGoals(){
 }
 
 void insertScores(Team& nbrone, Team& nbrtwo){
+	if(){
+	}
 	cout << " - " <<nbrone.name <<" vs "<<nbrtwo.name<< ": \n"; 
 	cout << nbrone.name<<" -> ";
 	nbrone.goalsFor += askGoals();
 	cout << nbrtwo.name<<" -> ";
 	nbrtwo.goalsFor += askGoals();
+	
+
+	int goalsOne, goalsTwo;
+	goalsOne = nbrone.goalsFor;
+	goalsTwo = nbrtwo.goalsFor;
 
 	 if(nbrone.goalsFor > nbrtwo.goalsFor){
 		 nbrone.points += 3;
