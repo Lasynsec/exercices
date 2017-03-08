@@ -21,7 +21,9 @@ typedef vector<Team> Teams;
 int askGoals();
 void insertScores(Team& nbrone, Team& nbrtwo);
 void displayResult(Teams const& teams);
-bool bestTeam(const team&, const team&);
+bool bestTeam(Team const& teamOne, Team const& teamTwo);
+Teams classification(Teams& teams);
+void exchange(Team& teamOne, Team& teamTwo);
 
 
 int main(){
@@ -31,9 +33,9 @@ int main(){
 	Team croatia = {"Croatia",0,0,0,0}; // instantiate croatia.
 	Team france = {"France",0,0,0,0}; // instantiaite france.
 	Team england = {"England",0,0,0,0}; // instantiate england.
-	
+
 	// insert scores
-	insertScores(switzerland,croatia);
+/*	insertScores(switzerland,croatia);
 	insertScores(france,england);
 	insertScores(switzerland,england);
 	insertScores(france,croatia);
@@ -48,14 +50,12 @@ int main(){
 
 	cout << endl;
 	cout <<"Results \n" ;
-	displayResult(teams);
+	displayResult(teams);*/
 	return 0;
 }
 
-int askGoals(){
+int askGoals(){/*ok*/
 	int nbrGoal;
-	
-bool bestTeam(const team&, const team&);
 	do{
 		if(!(cin>>nbrGoal)){
 			cout << "Please enter numbers only !"<< endl;
@@ -69,7 +69,7 @@ bool bestTeam(const team&, const team&);
 	return nbrGoal;
 }
 
-void insertScores(Team& nbrone, Team& nbrtwo){
+void insertScores(Team& nbrone, Team& nbrtwo){/*ok*/
 	int matchScoreTeamOne, matchScoreTeamTwo;
 	cout << " - " <<nbrone.name <<" vs "<<nbrtwo.name<< ": \n"; 
 	cout << nbrone.name<<" -> ";
@@ -94,19 +94,35 @@ void insertScores(Team& nbrone, Team& nbrtwo){
 }
 
 
-void displayResult(Teams const& teams){
+void displayResult(Teams const& teams){/*ok*/
 	for(auto team : teams){
 		team.goalDifference = team.goalsFor - team.goalsAgainst;
 		cout << team.name <<" : "<<team.points <<" points, "<<team.goalsFor<<" goals for, "<<team.goalsAgainst<<" goals against, "<<team.goalDifference<<" goal difference"<<endl; 
 	}
 }
-
+/*To test*/
 bool bestTeam(Team const& teamOne, Team const& teamTwo){
-	bool isBest;:w
+	bool isBest;
 	string userIput;
 	if(teamOne.points == teamTwo.points){
 		if(teamOne.goalsFor == teamTwo.goalsFor){
-			cout << "Choose the best team between both of them"<<endl;
+			cout << "Choose the best team between both of them\n";
+			cout <<" - type 1 for "<< teamOne.name <<"\n";
+			cout <<" - type 2 for "<< teamTwo.name <<"\n";
+			int userInput(0);
+			do {
+				if(!(cin>>userInput)){
+					cout <<"Enter numbers only"<<endl;
+					cin.clear();
+					cin.ignore(1000,'\n');
+				} else if(userInput < 1 || userInput > 2){
+					cout <<"Your number is not in the resquested range !! "<< endl;
+				}
+			}while(userInput < 1 || userInput > 2);
+
+			if(userInput == 1){
+				cout <<"The best is ?" << endl;	
+			}
 		} else if(teamOne.goalsFor > teamTwo.goalsFor){
 			isBest = true;	
 		}else {
@@ -117,4 +133,39 @@ bool bestTeam(Team const& teamOne, Team const& teamTwo){
 	} else {
 		isBest = false;
 	}
+}
+/*To test!!*/
+Teams classification(Teams& teams){
+	int j(3);
+	//cout << teams[j]<<endl;
+	cout << teams.size()<<endl;
+	for(size_t i(0); i < 2; ++i){
+		for(size_t j(3); j > i+1;--j){
+			if(bestTeam(teams[j],teams[j-1]) == true){
+				cout << "Ok"<<endl;
+			}
+		}
+	}
+}
+
+void exchange(Team& teamOne, Team& teamTwo){/*ok*/
+	Team temp;
+
+	temp.points			 = teamOne.points; 
+	temp.goalsFor	     = teamOne.goalsFor;
+	temp.goalsAgainst	 = teamOne.goalsAgainst;
+	temp.goalDifference = teamOne.goalDifference;
+	temp.name			 = teamOne.name;
+
+	teamOne.points			= teamTwo.points;
+	teamOne.goalsFor	    = teamTwo.goalsFor;
+	teamOne.goalsAgainst	= teamTwo.goalsAgainst;
+	teamOne.goalDifference  = teamTwo.goalDifference;
+	teamOne.name			= teamTwo.name;
+
+	teamTwo.points			= temp.points;
+	teamTwo.goalsFor	    = temp.goalsFor;
+	teamTwo.goalsAgainst	= temp.goalsAgainst;
+	teamTwo.goalDifference  = temp.goalDifference;
+	teamTwo.name			= temp.name;
 }
