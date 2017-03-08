@@ -100,7 +100,7 @@ void insertScores(Team& nbrone, Team& nbrtwo){
 
 void displayResult(Teams const& teams){
 	for(auto team : teams){
-		cout << team.name <<" : "<<team.points <<" points, "<<team.goalsFor<<" goals for, "<<team.goalsAgainst<<" goals against, "<<team.goalDifference<<" goal difference"<<endl; 
+	cout << team.name <<" : "<<team.points <<" points, "<<team.goalsFor<<" goals for, "<<team.goalsAgainst<<" goals against, "<<team.goalDifference<<" goal difference"<<endl;
 	}
 }
 
