@@ -21,8 +21,9 @@ typedef vector<Team> Teams;
 int askGoals();
 void insertScores(Team& nbrone, Team& nbrtwo);
 void displayResult(Teams const& teams);
+void displayClassification(Teams const& teams);
 bool bestTeam(Team const& teamOne, Team const& teamTwo);
-Teams classification(Teams& teams);
+void classification(Teams& teams);
 void exchange(Team& teamOne, Team& teamTwo);
 
 
@@ -35,7 +36,7 @@ int main(){
 	Team england = {"England",0,0,0,0}; // instantiate england.
 
 	// insert scores
-/*	insertScores(switzerland,croatia);
+	insertScores(switzerland,croatia);
 	insertScores(france,england);
 	insertScores(switzerland,england);
 	insertScores(france,croatia);
@@ -50,7 +51,11 @@ int main(){
 
 	cout << endl;
 	cout <<"Results \n" ;
-	displayResult(teams);*/
+	displayResult(teams);
+	cout << endl;
+	classification(teams);
+	displayClassification(teams);
+
 	return 0;
 }
 
@@ -133,16 +138,15 @@ bool bestTeam(Team const& teamOne, Team const& teamTwo){
 	} else {
 		isBest = false;
 	}
+	return isBest;
 }
-/*To test!!*/
-Teams classification(Teams& teams){
-	int j(3);
-	//cout << teams[j]<<endl;
-	cout << teams.size()<<endl;
+/*Keep working on it!!*/
+void classification(Teams& teams){
 	for(size_t i(0); i < 2; ++i){
-		for(size_t j(3); j > i+1;--j){
+		for(size_t j(3); j > i;--j){
+		//cout << teams[j].name << " against " <<teams[j-1].name<<"-> ";
 			if(bestTeam(teams[j],teams[j-1]) == true){
-				cout << "Ok"<<endl;
+				exchange(teams[j],teams[j-1]);
 			}
 		}
 	}
@@ -150,7 +154,7 @@ Teams classification(Teams& teams){
 
 void exchange(Team& teamOne, Team& teamTwo){/*ok*/
 	Team temp;
-
+	//cout << teamOne.name<<": points = " << teamOne.points <<" <->"<< teamTwo.name <<": points =  " << teamTwo.points <<endl;
 	temp.points			 = teamOne.points; 
 	temp.goalsFor	     = teamOne.goalsFor;
 	temp.goalsAgainst	 = teamOne.goalsAgainst;
@@ -168,4 +172,12 @@ void exchange(Team& teamOne, Team& teamTwo){/*ok*/
 	teamTwo.goalsAgainst	= temp.goalsAgainst;
 	teamTwo.goalDifference  = temp.goalDifference;
 	teamTwo.name			= temp.name;
+}
+
+
+void displayClassification(Teams const& teams){
+	cout << "Final Classification :" << endl;
+	for(size_t team(0); team < teams.size(); ++team){
+		cout << team+1 << " : "<< teams[team].name << endl;
+	}
 }
