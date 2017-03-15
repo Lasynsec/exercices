@@ -18,6 +18,7 @@ typedef vector<Player> Players;
 void inscription(Players& players,int nbrPlayers);
 int askNbrPlayers();
 Player playerGenerator();
+bool wordMatch(char& word, string& checkInString);
 
 int main(){
 	//how many player for the game.
@@ -77,3 +78,14 @@ Player playerGenerator(){
 	p.hangingStage = 0;
 	return p;
 }
+/*
+* The Word must match here.
+*/
+bool wordMatch(char& word, string& checkInString){
+	bool isMatched;
+	
+	//1 - get the input from the user.
+	//2 - do a regex search of the letter in the string.
+	//3 - put the answer
+	return isMatchted;	
+	}
