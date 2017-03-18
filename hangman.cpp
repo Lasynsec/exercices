@@ -15,22 +15,48 @@ struct Player {
 typedef vector<Player> Players;
 
 //Prototypes
-void inscription(Players& players,int nbrPlayers);
-int askNbrPlayers();
-Player playerGenerator();
-bool wordMatch(char& word, string& checkInString);
+void inscription(Players& players,int nbrPlayers);	//	player register.
+int askNbrPlayers();								//	how many players ?
+Player playerGenerator();							// create each player.
+bool wordMatch(char& playerLetter, string& checkInString);	// check if the word match.
+char aLetter();										// the player give a letter.
+string giveWord();									// the word to find.
+void gameManager(Players& players);					// the game manager.
 
 int main(){
 	//how many player for the game.
 	int nbrOfPlayer = askNbrPlayers();
-	// register all players
+	// register all players for the game.
 	Players vec;
 	inscription(vec,nbrOfPlayer);
 
+	/** Test for the players
 	for(auto player : vec){
 		cout << player.name << endl;
+	}*/
+
+	//ask the word.	
+	string wordToFind;
+	wordToFind = giveWord();
+	cout <<"You have to find the word : "<< wordToFind << endl;
+
+	char letterFromPlayer;
+	letterFromPlayer = aLetter();
+	cout << "You type the letter : "<< letterFromPlayer<<endl;
+
+	bool itMatchOrNot;
+	itMatchOrNot = wordMatch(letterFromPlayer, wordToFind);
+
+	string yesOrNot;
+	string* response = &yesOrNot;
+
+	if(itMatchOrNot == true){
+		*response ="Well done, the letter is correct !";
+	} else {
+		*response = "Sorry, but the letter doesn't match !";
 	}
 
+	cout << *response <<endl;
 	return 0;
 }
 
@@ -40,7 +66,7 @@ int main(){
 int askNbrPlayers(){
 	int nbrPlayers;
 	do{
-		cout << "Number of players ?";
+		cout << "Number of players ? : ";
 		if(!(cin>>nbrPlayers)){
 			cin.clear();
 			cin.ignore(1000,'\n');
@@ -63,12 +89,16 @@ void inscription(Players& vec,int nbrPlayers){
 }
 
 /*
- * Generate each player.
+ * Creat players.
  */
 Player playerGenerator(){
 	Player p;
+	int playerNbr(1);
+	int *ptr;
 
-	cout <<"The name of the player : ";
+	ptr = &playerNbr;
+
+	cout <<"The name of the player " << *ptr << " : ";
 	while(!(cin>>p.name)){
 		cout << "Must be a string !!"<<endl;
 		cin.clear();
@@ -76,16 +106,56 @@ Player playerGenerator(){
 	}
 	p.points = 0;
 	p.hangingStage = 0;
+	(*ptr)++;
+
 	return p;
 }
 /*
 * The Word must match here.
 */
-bool wordMatch(char& word, string& checkInString){
+bool wordMatch(char& playerLetter, string& checkInString){
 	bool isMatched;
-	
-	//1 - get the input from the user.
-	//2 - do a regex search of the letter in the string.
-	//3 - put the answer
-	return isMatchted;	
+		if(checkInString.find(playerLetter) != -1){
+			isMatched = true;
+		}else{
+			isMatched = false;
+		}
+	return isMatched;	
 	}
+
+/*
+ * The player must write a letter.
+ */
+char aLetter(){
+	char theWord;
+	cout <<"Type a letter : ";
+	while(!(cin>>theWord)){
+		cin.clear();
+		cin.ignore(1000,'\n');
+	}
+
+	return theWord;
+}
+
+/*
+ * The word to find.
+ */
+string giveWord(){
+	string aWord;
+	
+	cout << "Write the word to find : ";
+	while(!(cin>>aWord)){
+		cin.clear();
+		cin.ignore(1000,'\n');
+	}
+	return aWord;
+}
+
+/*
+ * The game manager
+void gameManager(Players& players){
+	for(size_t i(0); i < players.size(); ++i){
+		
+	}		
+}
+*/
