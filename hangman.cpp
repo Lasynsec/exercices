@@ -22,9 +22,10 @@ bool wordMatch(char& playerLetter, string& checkInString);	// check if the word 
 char aLetter(Player& player, int nbr);						// one player propose a letter.
 string giveWord();									// the word to find.
 void gameManager(Players& players);					// the game manager.
-string lettersToDisplay(char& playerLetter, string& checkInstring);
+string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player);
 
 int main(){
+	string theWord;
 	//how many player for the game.
 	int nbrOfPlayer(askNbrPlayers());
 	// register all players for the game.
@@ -45,6 +46,7 @@ int main(){
 */
 	return 0;
 }
+
 
 /*
  * The number of player for the game.
@@ -160,6 +162,7 @@ void gameManager(Players& players){
 	string displayLetters;
 	int nbr;
 	char letterFromPlayer;
+	//string wordToShow;// for the letterToDisplay function.
 
 	for(size_t i(0); i < players.size(); ++i){
 		cout <<"The player"<<" ("<< i+1 <<") " << players[i].name << " must write a word. \n";
@@ -167,16 +170,18 @@ void gameManager(Players& players){
 
 		wordToFind = giveWord();
 		cout << "<Clear the screen !>"<<endl;
-		cout <<"You have to find the word : "<< wordToFind << endl;
 		
+		string wordToShow(wordToFind.length(),'_'); // for the letterToDisplay function.
+		cout <<"You have to find the word : "<< wordToShow << endl;
+
 		for(size_t j(0); j < players.size(); ++j){
 			if(players[i].name == players[j].name){
 				continue;
 			}else {
 				nbr = j;
 				letterFromPlayer = aLetter(players[j],nbr);
-				displayLetters = lettersToDisplay(letterFromPlayer,wordToFind);
-				cout << displayLetters << endl;
+				displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j]);
+				cout << "The word to find is : "<<displayLetters << endl;
 			}
 		}
 
@@ -185,15 +190,24 @@ void gameManager(Players& players){
 	}		
 }
 
- string lettersToDisplay(char& playerLetter, string& checkInstring){
+ string lettersToDisplay(char& playerLetter, string& checkInstring, string& wordToShow, Player& player){
 	bool isMatched(wordMatch(playerLetter, checkInstring));
-	string theWord(checkInstring.length(),'_');
-
+	string replaceLetter;
+	string wordToReturn;
+	
 	if(isMatched){
-		cout <<"Well done, you are on the right way."<<endl;	
+		cout <<"Well done, you are on the right way."<<endl;
+		for(size_t i(0); i < checkInstring.length(); ++i){
+			if(checkInstring[i] == playerLetter){
+				replaceLetter = checkInstring[i];
+				wordToShow.replace(i,1,replaceLetter);
+			}
+		}
 	} else {
 		cout <<"Sorry but the letter doesn't match !"<<endl;
+		player.hangingStage++; 
 	}
-
-	return theWord;
+	
+	wordToReturn = wordToShow;
+	return wordToReturn;
 }
