@@ -22,7 +22,7 @@ bool wordMatch(char& playerLetter, string& checkInString);	// check if the word 
 char aLetter(Player& player, int nbr);						// one player propose a letter.
 string giveWord();									// the word to find.
 void gameManager(Players& players);					// the game manager.
-string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player);
+string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound);
 
 int main(){
 	string theWord;
@@ -162,7 +162,7 @@ void gameManager(Players& players){
 	string displayLetters;
 	int nbr;
 	char letterFromPlayer;
-	//string wordToShow;// for the letterToDisplay function.
+	bool isFound(false);;
 
 	for(size_t i(0); i < players.size(); ++i){
 		cout <<"The player"<<" ("<< i+1 <<") " << players[i].name << " must write a word. \n";
@@ -172,25 +172,26 @@ void gameManager(Players& players){
 		cout << "<Clear the screen !>"<<endl;
 		
 		string wordToShow(wordToFind.length(),'_'); // for the letterToDisplay function.
-		cout <<"You have to find the word : "<< wordToShow << endl;
-
-		for(size_t j(0); j < players.size(); ++j){
-			if(players[i].name == players[j].name){
-				continue;
-			}else {
-				nbr = j;
-				letterFromPlayer = aLetter(players[j],nbr);
-				displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j]);
-				cout << "The word to find is : "<<displayLetters << endl;
+		cout <<"You have to find the word : "<<wordToShow<<endl;
+		//loop here until the end of a play.
+		do {
+			for(size_t j(0); j < players.size(); ++j){
+				if(players[i].name == players[j].name){
+					continue;
+				}else {
+					nbr = j;
+					letterFromPlayer = aLetter(players[j],nbr);
+					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound);
+					cout << "The word to find is : "<<displayLetters << endl;
+				}
 			}
-		}
-
+		}while(isFound != true);
 		//to delete
 		break;
 	}		
 }
 
- string lettersToDisplay(char& playerLetter, string& checkInstring, string& wordToShow, Player& player){
+ string lettersToDisplay(char& playerLetter, string& checkInstring, string& wordToShow, Player& player, bool& isFound){
 	bool isMatched(wordMatch(playerLetter, checkInstring));
 	string replaceLetter;
 	string wordToReturn;
@@ -206,6 +207,12 @@ void gameManager(Players& players){
 	} else {
 		cout <<"Sorry but the letter doesn't match !"<<endl;
 		player.hangingStage++; 
+	}
+
+	//  If the two words are the same.
+	if(checkInstring == wordToShow){
+		cout << "Dude, the word are the same"<<endl;
+		isFound = true;
 	}
 	
 	wordToReturn = wordToShow;
