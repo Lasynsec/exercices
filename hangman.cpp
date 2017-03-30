@@ -4,15 +4,22 @@
 
 using namespace std;
 
-//struct
+//struct for player.
 struct Player {
 	string name;
 	int points;
-	int hangingStage;
 };
 
 //Def
 typedef vector<Player> Players;
+typedef vector<vector<char>> gallowImages; 
+
+//struct for gallow.
+struct Gallow {
+	int hangingStage;
+	gallowImages images; // vector of images.
+};
+
 
 //Prototypes
 void inscription(Players& players,int nbrPlayers);	//	player register.
@@ -23,6 +30,8 @@ char aLetter(Player& player, int nbr);						// one player propose a letter.
 string giveWord();									// the word to find.
 void gameManager(Players& players);					// the game manager.
 string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound);
+gallowImages gallowSequence(gallowImages& images); // display the hanging sequence.
+void displayGallow(gallowImages& images);
 
 int main(){
 	string theWord;
@@ -32,18 +41,12 @@ int main(){
 	Players vec;
 	inscription(vec,nbrOfPlayer);
 
-	/** Test : list the players
-	for(auto player : vec){
-		cout << player.name << endl;
-	}*/
-
 	//The game
 	gameManager(vec);
-/*
 
+	//The gallow
+	displayGallow(gallowImages& images);
 
-
-*/
 	return 0;
 }
 
@@ -98,7 +101,6 @@ Player playerGenerator(int& playerNbr){
 		cin.ignore(1000,'\n');
 	}
 	p.points = 0;
-	p.hangingStage = 0;
 
 	return p;
 }
@@ -210,7 +212,6 @@ void gameManager(Players& players){
 		}
 	} else {
 		cout <<"Sorry but the letter doesn't match !"<<endl;
-		player.hangingStage++; 
 	}
 
 	//  If the two words are the same.
@@ -221,4 +222,17 @@ void gameManager(Players& players){
 	
 	wordToReturn = wordToShow;
 	return wordToReturn;
+}
+
+
+gallowImages gallowSequence(gallowImages& images){
+	
+	for(size_t i(7); i > 0; --i){
+		for(size_t j(0); j < 8; ++j){
+			if(i == 7){
+				images[i][j].push_back('_');
+			}
+		}
+	}
+	
 }
