@@ -162,7 +162,7 @@ void gameManager(Players& players){
 	string displayLetters;
 	int nbr;
 	char letterFromPlayer;
-	bool isFound(false);;
+	bool isFound(false);
 
 	for(size_t i(0); i < players.size(); ++i){
 		cout <<"The player"<<" ("<< i+1 <<") " << players[i].name << " must write a word. \n";
@@ -174,20 +174,24 @@ void gameManager(Players& players){
 		string wordToShow(wordToFind.length(),'_'); // for the letterToDisplay function.
 		cout <<"You have to find the word : "<<wordToShow<<endl;
 		//loop here until the end of a play.
-		do {
+		while(isFound != true)
+		{
 			for(size_t j(0); j < players.size(); ++j){
 				if(players[i].name == players[j].name){
 					continue;
 				}else {
+					if(isFound == true){
+						continue;
+					}
 					nbr = j;
-					letterFromPlayer = aLetter(players[j],nbr);
-					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound);
+					letterFromPlayer = aLetter(players[j],nbr); // the player give a letter.
+					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound);// the word is displaying on the screen.
 					cout << "The word to find is : "<<displayLetters << endl;
 				}
 			}
-		}while(isFound != true);
-		//to delete
-		break;
+		}
+		isFound = false;
+		//break;
 	}		
 }
 
@@ -211,7 +215,7 @@ void gameManager(Players& players){
 
 	//  If the two words are the same.
 	if(checkInstring == wordToShow){
-		cout << "Dude, the word are the same"<<endl;
+		cout << "Good job, you've found the word"<<endl;
 		isFound = true;
 	}
 	
