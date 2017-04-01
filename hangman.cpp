@@ -8,17 +8,13 @@ using namespace std;
 struct Player {
 	string name;
 	int points;
+	bool eliminated = false;
 };
 
 //Def
 typedef vector<Player> Players;
 typedef vector<vector<char>> gallowImages; 
-
-//struct for gallow.
-struct Gallow {
-	int hangingStage;
-	gallowImages images; // vector of images.
-};
+typedef vector<gallowImages> vectorGallows;
 
 
 //Prototypes
@@ -28,25 +24,123 @@ Player playerGenerator(int& playerNbr);				// create each player.
 bool wordMatch(char& playerLetter, string& checkInString);	// check if the word match.										
 char aLetter(Player& player, int nbr);						// one player propose a letter.
 string giveWord();									// the word to find.
-void gameManager(Players& players);					// the game manager.
-string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound);
-gallowImages gallowSequence(gallowImages& images); // display the hanging sequence.
+void gameManager(Players& players, vectorGallows& gallowSequence); // the game manager with all players and gallow images.
+string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound, vectorGallows& gallowSequence, int& hangingStage);
 void displayGallow(gallowImages& images);
 
 int main(){
+
+	//The gallow images 
+	gallowImages gallowLevelOne(
+	 {	 {},
+		 {},
+		 {},
+		 {},
+		 {},
+		 {'_','_','_','_','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveTwo;
+	gallowImages gallowLevelTwo(
+	 {	 {},
+		 {},
+		 {},
+		 {},
+		 {},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveThree;
+	gallowImages gallowLevelThree(
+	 { 	 {},
+		 {},
+		 {},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveFour;
+	gallowImages gallowLevelFour(
+	 {	 {},
+		 {},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveFive;
+	gallowImages gallowLevelFive(
+	 {	 {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveSix;
+	gallowImages gallowLevelSix(
+	 {	 {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|','/',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveSept;
+	gallowImages gallowLevelSeven(
+	 {	 {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|','/',' ','|',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'} }
+	);
+	//gallowImages gallowLeveEight;
+	gallowImages gallowLevelEight(
+	 {   {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|','/',' ','|',' ',' '},
+		 {' ',' ','|',' ','_','0','_',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'}}
+	);
+	//gallowImages gallowLeveNine;
+	gallowImages gallowLevelNine(
+	 {	 {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|','/',' ','|',' ',' '},
+		 {' ',' ','|',' ','_','0','_',' '},
+		 {' ',' ','|',' ',' ','|',' ',' '},
+		 {' ',' ','|',' ',' ',' ',' ',' '},
+		 {'_','/','|','\\','_','_','_','_'}}
+	);
+	//gallowImages gallowLeveTen;
+	gallowImages gallowLevelTen(
+	 {	 {},
+		 {' ',' ','_','_','_','_','_',' '},
+		 {' ',' ','|','/',' ','|',' ',' '},
+		 {' ',' ','|',' ','_','0','_',' '},
+		 {' ',' ','|',' ',' ','|',' ',' '},
+		 {' ',' ','|',' ','/',' ','\\',' '},
+		 {'_','/','|','\\','_','_','_','_'}}
+	);
+
+    vectorGallows gallowSequence({gallowLevelOne, gallowLevelTwo, gallowLevelThree, gallowLevelFour, gallowLevelFive, gallowLevelSix, gallowLevelSeven, gallowLevelEight, gallowLevelNine, gallowLevelTen});
+
 	string theWord;
 	//how many player for the game.
 	int nbrOfPlayer(askNbrPlayers());
 	// register all players for the game.
 	Players vec;
 	inscription(vec,nbrOfPlayer);
-
 	//The game
-	gameManager(vec);
+	gameManager(vec,gallowSequence);
 
-	//The gallow
-	displayGallow(gallowImages& images);
-
+	displayGallow(gallowSequence[1]);
 	return 0;
 }
 
@@ -159,12 +253,13 @@ string giveWord(){
 
 /*
  * The game manager*/
-void gameManager(Players& players){
+void gameManager(Players& players, vectorGallows& gallowSequence){
 	string wordToFind;
 	string displayLetters;
 	int nbr;
 	char letterFromPlayer;
 	bool isFound(false);
+	int hangingStage(0); // the hanging level.
 
 	for(size_t i(0); i < players.size(); ++i){
 		cout <<"The player"<<" ("<< i+1 <<") " << players[i].name << " must write a word. \n";
@@ -187,7 +282,7 @@ void gameManager(Players& players){
 					}
 					nbr = j;
 					letterFromPlayer = aLetter(players[j],nbr); // the player give a letter.
-					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound);// the word is displaying on the screen.
+					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound, gallowSequence, hangingStage);// the word is displaying on the screen.
 					cout << "The word to find is : "<<displayLetters << endl;
 				}
 			}
@@ -197,7 +292,7 @@ void gameManager(Players& players){
 	}		
 }
 
- string lettersToDisplay(char& playerLetter, string& checkInstring, string& wordToShow, Player& player, bool& isFound){
+ string lettersToDisplay(char& playerLetter, string& checkInstring, string& wordToShow, Player& player, bool& isFound, vectorGallows& gallowSequence, int& hangingStage){
 	bool isMatched(wordMatch(playerLetter, checkInstring));
 	string replaceLetter;
 	string wordToReturn;
@@ -212,6 +307,8 @@ void gameManager(Players& players){
 		}
 	} else {
 		cout <<"Sorry but the letter doesn't match !"<<endl;
+		displayGallow(gallowSequence[hangingStage]);
+		++hangingStage;
 	}
 
 	//  If the two words are the same.
@@ -224,15 +321,15 @@ void gameManager(Players& players){
 	return wordToReturn;
 }
 
+/**
+ * that manage the gallow. 
+ */
 
-gallowImages gallowSequence(gallowImages& images){
-	
-	for(size_t i(7); i > 0; --i){
-		for(size_t j(0); j < 8; ++j){
-			if(i == 7){
-				images[i][j].push_back('_');
-			}
+void displayGallow(gallowImages& images){
+	for(auto row : images){
+		for(auto content : row){
+			cout << content << "";
 		}
+		cout << '\n';
 	}
-	
 }
