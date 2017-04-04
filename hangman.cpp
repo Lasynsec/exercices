@@ -7,7 +7,8 @@ using namespace std;
 //struct for player.
 struct Player {
 	string name;
-	int points;
+	int points = 0;
+	int hangingStage = 0;
 	bool eliminated = false;
 };
 
@@ -27,41 +28,31 @@ string giveWord();									// the word to find.
 void gameManager(Players& players, vectorGallows& gallowSequence); // the game manager with all players and gallow images.
 string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound, vectorGallows& gallowSequence, int& hangingStage);
 void displayGallow(gallowImages& images);
+int nbrOfEliminated(Players& players,int& nbrTimes); // get the number of eliminated.
 
 int main(){
 
 	//The gallow images 
 	gallowImages gallowLevelOne(
-	 {	 {},
-		 {},
-		 {},
-		 {},
-		 {},
+	 {	 
 		 {'_','_','_','_','_','_','_','_'} }
 	);
 	//gallowImages gallowLeveTwo;
 	gallowImages gallowLevelTwo(
-	 {	 {},
-		 {},
-		 {},
-		 {},
-		 {},
+	 {	 
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {'_','/','|','\\','_','_','_','_'} }
 	);
 	//gallowImages gallowLeveThree;
 	gallowImages gallowLevelThree(
-	 { 	 {},
-		 {},
-		 {},
+	 {	 
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {'_','/','|','\\','_','_','_','_'} }
 	);
 	//gallowImages gallowLeveFour;
 	gallowImages gallowLevelFour(
-	 {	 {},
-		 {},
+	 {	 
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
@@ -70,8 +61,7 @@ int main(){
 	);
 	//gallowImages gallowLeveFive;
 	gallowImages gallowLevelFive(
-	 {	 {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
@@ -80,8 +70,7 @@ int main(){
 	);
 	//gallowImages gallowLeveSix;
 	gallowImages gallowLevelSix(
-	 {	 {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
@@ -90,8 +79,7 @@ int main(){
 	);
 	//gallowImages gallowLeveSept;
 	gallowImages gallowLevelSeven(
-	 {	 {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ','|',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
@@ -100,8 +88,7 @@ int main(){
 	);
 	//gallowImages gallowLeveEight;
 	gallowImages gallowLevelEight(
-	 {   {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ','|',' ',' '},
 		 {' ',' ','|',' ','_','0','_',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
@@ -110,8 +97,7 @@ int main(){
 	);
 	//gallowImages gallowLeveNine;
 	gallowImages gallowLevelNine(
-	 {	 {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ','|',' ',' '},
 		 {' ',' ','|',' ','_','0','_',' '},
 		 {' ',' ','|',' ',' ','|',' ',' '},
@@ -120,8 +106,7 @@ int main(){
 	);
 	//gallowImages gallowLeveTen;
 	gallowImages gallowLevelTen(
-	 {	 {},
-		 {' ',' ','_','_','_','_','_',' '},
+	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ','|',' ',' '},
 		 {' ',' ','|',' ','_','0','_',' '},
 		 {' ',' ','|',' ',' ','|',' ',' '},
@@ -137,10 +122,14 @@ int main(){
 	// register all players for the game.
 	Players vec;
 	inscription(vec,nbrOfPlayer);
-	//The game
-	gameManager(vec,gallowSequence);
 
-	displayGallow(gallowSequence[1]);
+	//The game
+	gameManager(vec,gallowSequence); 
+	
+	// The game is over.
+	cout<<"The game is over !\n";
+	cout <<"The result :\n";
+
 	return 0;
 }
 
@@ -258,8 +247,11 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 	string displayLetters;
 	int nbr;
 	char letterFromPlayer;
-	bool isFound(false);
-	int hangingStage(0); // the hanging level.
+	bool isFound(false); // the word has been found o not.
+	bool isEliminated(false); // the player is eliminated;
+	int hangingStage(0); // the hanging level.i
+	int nbrEliminated(0);
+	int showNbrEliminated(0);
 
 	for(size_t i(0); i < players.size(); ++i){
 		cout <<"The player"<<" ("<< i+1 <<") " << players[i].name << " must write a word. \n";
@@ -274,20 +266,32 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 		while(isFound != true)
 		{
 			for(size_t j(0); j < players.size(); ++j){
-				if(players[i].name == players[j].name){
+				if(players[i].name == players[j].name){// if the player that guess is the same than the player that propose the word.
+					cout << "The same "<< endl;
 					continue;
 				}else {
-					if(isFound == true){
-						continue;
+					if(players[j].eliminated == true){ //if the player is eliminated.
+						cout << "The player "<< players[j].name<<" can't play, he is eliminated !\n";
+						//continue; // we stop de game.
+					}else{
+						nbr = j;
+						letterFromPlayer = aLetter(players[j],nbr); // the player give a letter.
+						displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound, gallowSequence, hangingStage);// the word is displaying on the screen.
+						cout << "The word to find is : "<<displayLetters << endl;
 					}
-					nbr = j;
-					letterFromPlayer = aLetter(players[j],nbr); // the player give a letter.
-					displayLetters = lettersToDisplay(letterFromPlayer,wordToFind,wordToShow,players[j],isFound, gallowSequence, hangingStage);// the word is displaying on the screen.
-					cout << "The word to find is : "<<displayLetters << endl;
+				}
+				showNbrEliminated = nbrOfEliminated(players,nbrEliminated);
+				//cout << "The number of eliminated is "<<showNbrEliminated<<endl;
+				if(showNbrEliminated >= players.size()){
+					isFound = true;
 				}
 			}
 		}
 		isFound = false;
+		cout << endl;
+		if(showNbrEliminated >= players.size()){
+			break;
+		}
 		//break;
 	}		
 }
@@ -307,8 +311,14 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 		}
 	} else {
 		cout <<"Sorry but the letter doesn't match !"<<endl;
-		displayGallow(gallowSequence[hangingStage]);
-		++hangingStage;
+		displayGallow(gallowSequence[player.hangingStage]);
+		++player.hangingStage;
+		if(player.hangingStage < gallowSequence.size()){
+			cout << "player hangingStage " << player.hangingStage <<" and gallowLength is " << gallowSequence.size()<<endl;
+		} else {
+			player.eliminated = true; // the player is eliminated.
+			cout << "Player " << player.name << " is eliminated "<<endl;
+		}
 	}
 
 	//  If the two words are the same.
@@ -324,7 +334,6 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 /**
  * that manage the gallow. 
  */
-
 void displayGallow(gallowImages& images){
 	for(auto row : images){
 		for(auto content : row){
@@ -332,4 +341,19 @@ void displayGallow(gallowImages& images){
 		}
 		cout << '\n';
 	}
+}
+
+/**
+ * Get the number of eliminated.
+ */
+int nbrOfEliminated(Players& players,int& nbrTimes){ // get the number of eliminated.
+	for(auto player : players){
+		if(player.eliminated == true){
+			if(nbrTimes < players.size()){
+				nbrTimes += player.eliminated;
+			}
+		}
+		cout << player.name << " is eliminated : "<<player.eliminated<<endl;
+	}
+	return nbrTimes;
 }
