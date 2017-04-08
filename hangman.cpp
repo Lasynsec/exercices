@@ -32,7 +32,6 @@ string giveWord();									// the word to find.
 void gameManager(Players& players, vectorGallows& gallowSequence); // the game manager with all players and gallow images.
 string lettersToDisplay(char& playerLetter, string& checkInstring,string& wordToShow, Player& player, bool& isFound, vectorGallows& gallowSequence, int& hangingStage);
 void displayGallow(gallowImages& images);
-int nbrOfEliminated(Players& players,int& nbrTimes); // get the number of eliminated.
 void displayGameResults(Players& players); // display the final result.
 
 int main(){
@@ -89,7 +88,6 @@ int main(){
 	 {	 {' ',' ','_','_','_','_','_',' '},
 		 {' ',' ','|','/',' ','|',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
-
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {' ',' ','|',' ',' ',' ',' ',' '},
 		 {'_','/','|','\\','_','_','_','_'} }
@@ -126,11 +124,11 @@ int main(){
 
 	string theWord;
 	//how many player for the game.
-		//int nbrOfPlayer(askNbrPlayers());
+		//int nbrOfPlayer(askNbrPlayers());-------------------delete the comment after testing.
 	// register all players for the game.
-		//Players vec;
-		//inscription(vec,nbrOfPlayer);
-	Players vec = { 
+		//Players vec;-------------------------delete the comment after testing.
+		//inscription(vec,nbrOfPlayer);-------delte the comment after testing.
+	Players vec = { //---------delete the structure after testing. 
 		{1,"Jordan",0,0,false},
 		{2,"Marc",0,0,false},
 		{3,"Jenna",0,0,false},
@@ -280,7 +278,7 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 		wordToFind = giveWord();
 		cout << wordToFind<<endl;
 		cout << "<Clear the screen !>"<<endl;
-		//cout << string(80,'\n');
+		//cout << string(80,'\n');----delete the comment after testing.
 		string wordToShow(wordToFind.length(),'_'); // for the letterToDisplay function.
 		cout <<"You have to find the word : "<<wordToShow<<endl;
 		//loop here until the end of a play.
@@ -298,11 +296,9 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 						if(searchIt != end(eliPlayers)){
 							cout <<"Already hanged"<<endl;
 						}else{
-							//cout <<"Still Alive"<<endl;
 							eliPlayers.push_back(players[j]);
 						}
 						cout << "The player "<< players[j].name<<" can't play, he is eliminated !\n";
-						//continue; // we stop de game.
 					}else{
 						nbr = j;
 
@@ -334,7 +330,7 @@ void gameManager(Players& players, vectorGallows& gallowSequence){
 			}
 		cout << "isFound is "<<isFound << endl;
 		}
-		cin.ignore();//-------------------------//delete after test.
+		cin.ignore();//-------------------------//delete cin after test.
 		isFound = false;
 		cout << endl;
 		if(eliPlayers.size() >= players.size()-1){
@@ -387,20 +383,6 @@ void displayGallow(gallowImages& images){
 		}
 		cout << '\n';
 	}
-}
-
-/**
- * Get the number of eliminated.
- */
-int nbrOfEliminated(Players& players,int& nbrTimes){ // get the number of eliminated.
-	for(auto player : players){
-		if(player.eliminated == true){
-			//if(){
-			//	nbrTimes += player.eliminated;
-			//}
-		}
-	}
-	return nbrTimes;
 }
 
 void displayGameResults(Players& players){
