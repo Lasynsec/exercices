@@ -22,6 +22,7 @@ struct Player{
 typedef array<array<Color,7>,6> Grid;
 typedef vector<Player> Players;
 typedef vector<char> colorsDisk;
+typedef array <int,2> Positions;
 
 /*Prototypes*/
 void display(const Grid& grid);
@@ -31,25 +32,26 @@ void playersRegistration(Players& player);
 bool checkDuplicateDisk(char color, colorsDisk& colorVec);
 void askPosition(Grid& grid, Player& player);
 int askNumber(bool isVertical);
+void connectFour(Players& players, Grid& grid);
+bool isEmpty(Grid& grid, Positions& positions);
 
 int main(){
-	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
 	/*Grid initialisation*/
 	Grid grid;				// create the grid.
 	initialisation(grid);	// initialise the grid.
 	
 	/*Players registration*/
-	//Players players; //------------------------------------// get rid of the command after installing.
+	//Players players; //------------------------------------// get rid of the comment after testing.
 	Players players = {{1,"emma",false,red},{2,"jenna",false,yellow}}; // remove the line after testing.
 
 	//playersRegistration(players); //save the players.---------------------// get rid of the comment after testing.
 	
 	/*Play the game*/
-    askPosition(grid, players[0]);
+	connectFour(players, grid);
 	//grid[2][3] = red;
 
 	/*Display the game*/
-	display(grid);
+	//display(grid);
 
 	return 0;
 }
@@ -150,6 +152,7 @@ void playersRegistration(Players& players){
 	for(size_t i(0); i < 2; i++){
 		players.push_back(playerGenerator(i+1, colorsVec));
 		cout << endl;
+
 	}
 }
 
@@ -177,17 +180,30 @@ bool checkDuplicateDisk(char color, colorsDisk& colorVec){
  * @param: the player that will play.
  */
 void askPosition(Grid& grid, Player& player){
-	int horizontal;
-	int vertical;
-	bool isNumber;
-	bool isHorizontal;
+	int horizontal; // for the player vertical position.
+	int vertical; // for the player horizontal position.
+	Positions positions;
+	bool isempty;
 
-	cout << player.name <<" type the horizontal position of the new disk:";
-	horizontal = askNumber(false);
-	cout <<player.name <<" type the vertical position of the new disk:";
-	vertical = askNumber(true);
+	do{
+		cout << "Player "<< "("<<player.id <<") "<< player.name <<": " << "\n";
+		cout <<" - type the horizontal position of your new disk:";
+		horizontal = askNumber(false);
+		cout <<" - type the vertical position of your new disk:";
+		vertical = askNumber(true);
+		
+		positions[0] = vertical;
+		positions[1] = horizontal;
+	
+		isempty = isEmpty(grid,positions);
 
-	grid[vertical-1][horizontal-1]= player.disk;
+		if(isempty){
+			grid[vertical-1][horizontal-1] = player.disk;
+		} else {
+			cout << endl;
+			cout <<"*Sorry but you cannot put a disk here !"<< endl;
+		}
+	}while(isempty != true);
 }
 
 /**
@@ -225,4 +241,31 @@ int askNumber(bool isVertical){
 	}while(isCorrect != true );
 
 	return numberToSend;
+}
+
+/**
+ * Will handle the game.
+ */
+void connectFour(Players& players, Grid& grid){
+	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
+	for(auto player : players){
+		askPosition(grid, player);//place the disk in the grid.
+		display(grid); // display the grid.
+	}
+}
+
+/**
+ * Check if the input position is not empty.
+ * @param: the grid.
+ * @param: the player positions in the multi array.
+ * @return: the boolean value.
+ */
+bool isEmpty(Grid& grid, Positions& positions){
+	bool isempty;
+	if(grid[positions[0]-1][positions[1]-1] == empty){
+		isempty = true; // is not empty can't play.
+	}else {
+		isempty = false; // is empty can play.
+	}
+	return isempty;
 }
