@@ -48,10 +48,6 @@ int main(){
 	
 	/*Play the game*/
 	connectFour(players, grid);
-	//grid[2][3] = red;
-
-	/*Display the game*/
-	//display(grid);
 
 	return 0;
 }
@@ -63,8 +59,9 @@ int main(){
  */
 void display(const Grid& grid){
 	cout << endl;
+	int column(1);
 	for(auto row: grid){
-		cout << " |";
+		cout <<column<< "|";
 		for(auto kase : row){
 			if(kase == empty){
 				cout << ' ';
@@ -76,6 +73,7 @@ void display(const Grid& grid){
 			cout << '|';
 		}
 		cout << endl;
+		++column;
 	}
 
 	cout << '=';
@@ -248,10 +246,13 @@ int askNumber(bool isVertical){
  */
 void connectFour(Players& players, Grid& grid){
 	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
-	for(auto player : players){
-		askPosition(grid, player);//place the disk in the grid.
-		display(grid); // display the grid.
-	}
+	bool gameIsOver;
+	do{
+		for(auto player : players){
+			askPosition(grid, player);//place the disk in the grid.
+			display(grid); // display the grid.
+		}
+	}while(gameIsOver != true);
 }
 
 /**
