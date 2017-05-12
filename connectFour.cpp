@@ -30,10 +30,11 @@ void initialisation(Grid& grid);
 Player playerGenerator(int &id, colorsDisk& colorsVec);
 void playersRegistration(Players& player);
 bool checkDuplicateDisk(char color, colorsDisk& colorVec);
-void askPosition(Grid& grid, Player& player);
+Positions askPosition(Grid& grid, Player& player);
 int askNumber(bool isVertical);
 void connectFour(Players& players, Grid& grid);
 bool isEmpty(Grid& grid, Positions& positions);
+bool hasWonTheGame(Positions& positions, Grid& grid); // check if the player has won.
 
 int main(){
 	/*Grid initialisation*/
@@ -63,12 +64,12 @@ void display(const Grid& grid){
 	for(auto row: grid){
 		cout <<column<< "|";
 		for(auto kase : row){
-			if(kase == empty){
+			if(kase == empty){ // empty is equal to 0.
 				cout << ' ';
 			} else if(kase == red){
-				cout << 'O';
+				cout << 'O'; // is equal to 1.
 			} else {
-				cout << 'X';
+				cout << 'X'; // equal to 2.
 			}
 			cout << '|';
 		}
@@ -177,7 +178,7 @@ bool checkDuplicateDisk(char color, colorsDisk& colorVec){
  * @param: the grid to modiy.
  * @param: the player that will play.
  */
-void askPosition(Grid& grid, Player& player){
+Positions askPosition(Grid& grid, Player& player){
 	int horizontal; // for the player vertical position.
 	int vertical; // for the player horizontal position.
 	Positions positions;
@@ -202,6 +203,8 @@ void askPosition(Grid& grid, Player& player){
 			cout <<"*Sorry but you cannot put a disk here !"<< endl;
 		}
 	}while(isempty != true);
+
+	return positions;
 }
 
 /**
@@ -247,9 +250,11 @@ int askNumber(bool isVertical){
 void connectFour(Players& players, Grid& grid){
 	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
 	bool gameIsOver;
+	Positions positions;
 	do{
 		for(auto player : players){
-			askPosition(grid, player);//place the disk in the grid.
+			positions = askPosition(grid, player);//place the disk in the grid.
+			hasWonTheGame(positions, grid);
 			display(grid); // display the grid.
 		}
 	}while(gameIsOver != true);
@@ -269,4 +274,29 @@ bool isEmpty(Grid& grid, Positions& positions){
 		isempty = false; // is empty can play.
 	}
 	return isempty;
+}
+
+/**
+ * Check if the player has a row of four elements
+ * @param: the new position of the disk.
+ * @param: all the grid.
+ * @return: return a boolean value.
+ */
+bool hasWonTheGame(Positions& positions, Grid& grid){
+	
+	/**
+	 * horizontal loop.
+	 */
+	cout << "Horizontal - ";
+	for(size_t i(0); i < grid[positions[0]].size(); ++i){
+		cout<<grid[positions[0]-1][i];
+	}
+	cout << endl;
+	/**
+	 * vertical loop.
+	 */
+	cout << "Vertical - ";
+	for(size_t i(0); i < 6; ++i){
+		cout <<grid[i][positions[1]-1];
+	}
 }
