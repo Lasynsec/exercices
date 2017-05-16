@@ -328,7 +328,8 @@ bool hasWonTheGame(Positions& positions, Grid& grid){
 	cout << endl;
 	cout << "intercept = ["<< inversedY-1<<",1];\n";
 
-	// Y-intecept. 
+	// Y-intecept.
+	// Put a condition here.
 	intercept[0] = inversedY-2; 
 	intercept[1] = 0;
 
