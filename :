@@ -250,25 +250,14 @@ int askNumber(bool isVertical){
 void connectFour(Players& players, Grid& grid){
 	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
 	bool gameIsOver;
-	Positions positions={5,1}; // remove after testing.
-	//Positions positions; remove comment after testing.
+	Positions positions;
 	do{
 		for(auto player : players){
 			positions = askPosition(grid, player);//place the disk in the grid.
 			hasWonTheGame(positions, grid);
 			display(grid); // display the grid.
 		}
-	}while(gameIsOver != true);//remove comments after testing.
-
-	/* remove below after testing.
-	grid[5][1] = yellow;
-	grid[4][2] = red;
-	grid[3][3] = yellow;
-	grid[2][4] = red;
-	grid[1][5] = yellow;
-	grid[0][6] = red;
-	hasWonTheGame(positions, grid); // remove after testing
-	display(grid); // remove after testing.*/
+	}while(gameIsOver != true);
 }
 
 /**
@@ -308,37 +297,25 @@ bool hasWonTheGame(Positions& positions, Grid& grid){
 	 */
 	cout << "Vertical - ";
 	for(size_t i(0); i < 6; ++i){
-		cout<<grid[i][positions[1]-1];
+		cout <<grid[i][positions[1]-1];
 	}
 
 	/**
 	 * diagonal
 	 */
 	Positions intercept; // first we find the intercept if x = 0, what is y.
-	int b(0);
-	int y(0);
+	int b;
+	int y;
     int yUser(positions[0]);
 	int x(positions[1]);
-    int inversedY(0);
-
-	y = 6 - 1 * (yUser - 1);// calculate the Y-intercept.
-	b = y - x;
-	inversedY = 6-b+1; // inversed intercept for the programme.
+    
+	y = 6 - 1(yUser - 1)
+	//b = y - x;
 
 	cout << endl;
-	cout << "intercept = ["<< inversedY-1<<",1];\n";
+	//cout << " intercept = "<< b ;
+	cout << " Y user = "<< y;
 
-	// Y-intecept. 
-	intercept[0] = inversedY-2; 
-	intercept[1] = 0;
 
-	cout << "Intercept Y : "<<intercept[0]<<"\n";
-	//cout << intercept[1];
-	cout << "Diagonal - ";
-	grid[intercept[0]][intercept[1]] = yellow; //remove after testing.
-	for(size_t i(0); i < 6; ++i){
-		if(intercept[0] < 7 && intercept[0] >= 0){
-			cout << grid[intercept[0]--][intercept[1]++];
-		}
-	}
+	
 }
