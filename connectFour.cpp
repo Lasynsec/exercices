@@ -330,15 +330,20 @@ bool hasWonTheGame(Positions& positions, Grid& grid){
 
 	// Y-intecept.
 	// Put a condition here.
-	intercept[0] = inversedY-2; 
-	intercept[1] = 0;
-
+	if(inversedY-1 > 6){
+		intercept[0] = 5; 
+		intercept[1] = (inversedY-1)-6;
+	}else{
+		intercept[0] = inversedY-2; 
+		intercept[1] = 0;
+	}
+	
 	cout << "Intercept Y : "<<intercept[0]<<"\n";
 	//cout << intercept[1];
 	cout << "Diagonal - ";
 	grid[intercept[0]][intercept[1]] = yellow; //remove after testing.
 	for(size_t i(0); i < 6; ++i){
-		if(intercept[0] < 7 && intercept[0] >= 0){
+		if((intercept[0] < 6 && intercept[0] >= 0) && (intercept[1] < 7 && intercept[1] >= 0)){
 			cout << grid[intercept[0]--][intercept[1]++];
 		}
 	}
