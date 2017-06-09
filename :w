@@ -23,21 +23,20 @@ struct Player{ //structure of the player.
 typedef array<array<Color,7>,6> Grid; // The grid of the game.
 typedef vector<Player> Players; // A array of players.
 typedef vector<char> colorsDisk; // A array of disk colors.
-typedef vector<int> fourInaRow;
 typedef array <int,2> Positions; // To store the position of the disk.
 
 /*Prototypes*/
 void display(const Grid& grid); // Display the grid with disks.
-void initialisation(Grid& grid); // The game will start with empty cases;
+void initialisation(Grid& grid) // The game will start with empty cases;
 Player playerGenerator(int &id, colorsDisk& colorsVec); // create each player.
 void playersRegistration(Players& player);//Registrate each player.
 bool checkDuplicateDisk(char color, colorsDisk& colorVec);//Check if the same color has been chosen twice.
 Positions askPosition(Grid& grid, Player& player); // Ask to the players the next position of his disk.
 int askNumber(bool isVertical);// Ask the number to the player.
-void connectFour(Players& players, Grid& grid);// The whole game is handled here.
-bool isEmpty(Grid& grid, Positions& positions);//Check if the next position is free.
+void connectFour(Players& players, Grid& grid);// The whole game is handeling here.
+bool isEmpty(Grid& grid, Positions& positions);
 bool hasWonTheGame(Player& player, Positions& positions, Grid& grid); // check if the player has won.
-void checkTheConnectFour(fourInaRow& four,Player& player); //check if the player get a four row.
+int checkTheConnectFour(char colorDisk, Player& player);
  
 int main(){
 	/*Grid initialisation*/
@@ -111,7 +110,7 @@ Player playerGenerator(int id, colorsDisk& colorsVec){
 	Player p;
 	p.id = id;
 	cout << "Player ("<< p.id << "), please type your name : "; 
-	cin>>p.name; //The player type his name here.
+	cin>>p.name;
 	p.hasWon = false;
 	char colorDisk; // the color of the disk(y or r);
 	bool isAvailable; // if he can choose the disk color.
@@ -124,7 +123,7 @@ Player playerGenerator(int id, colorsDisk& colorsVec){
 			cout <<"->Please type only (r) or (y) !"<<endl;
 		}else{
 				isAvailable = checkDuplicateDisk(colorDisk, colorsVec);
-				if(isAvailable){ //if the color has not already been taken.
+				if(isAvailable){
 					if(colorDisk == 'r'){
 						p.disk = red;
 					} else {
@@ -142,7 +141,7 @@ Player playerGenerator(int id, colorsDisk& colorsVec){
 		p.disk = yellow;
 	}
 
-	return p; //return the struct of the player.
+	return p;
 }
 
 /**
@@ -150,9 +149,9 @@ Player playerGenerator(int id, colorsDisk& colorsVec){
  * @param: The Players vector.
  */
 void playersRegistration(Players& players){
-	colorsDisk colorsVec; //for the color's disk.
+	colorsDisk colorsVec;
 	for(size_t i(0); i < 2; i++){
-		players.push_back(playerGenerator(i+1, colorsVec)); // save the player configuration in the vector players.
+		players.push_back(playerGenerator(i+1, colorsVec));
 		cout << endl;
 
 	}
@@ -165,11 +164,11 @@ void playersRegistration(Players& players){
  */
 bool checkDuplicateDisk(char color, colorsDisk& colorVec){
 	bool isNotAvailable;
-	auto isDuplicate = find(begin(colorVec), end(colorVec), color); //loop through the array.
+	auto isDuplicate = find(begin(colorVec), end(colorVec), color);
 	if(isDuplicate != end(colorVec)){ //the color already exist.
 		isNotAvailable = false;
 	} else {
-		colorVec.push_back(color); // if color free, push it into the vector.
+		colorVec.push_back(color);
 		isNotAvailable = true;
 	}
 
@@ -184,7 +183,7 @@ bool checkDuplicateDisk(char color, colorsDisk& colorVec){
 Positions askPosition(Grid& grid, Player& player){
 	int horizontal; // for the player vertical position.
 	int vertical; // for the player horizontal position.
-	Positions positions; //for the disk position.
+	Positions positions;
 	bool isempty;
 
 	do{
@@ -248,20 +247,20 @@ int askNumber(bool isVertical){
 }
 
 /**
- * The game is handled here.
+ * Will handle the game.
  */
 void connectFour(Players& players, Grid& grid){
 	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
-	bool gameIsOver(false);;
-	Positions positions; // For the position of the disk.
-	int checkFour(0);// check if the player reaches four disks in a row.
+	bool gameIsOver;
+	Positions positions;
+	int checkFour(0);// check if the player reaches four.
 	do{
-		for(auto player : players){ // all players must play.
+		for(auto player : players){
 			positions = askPosition(grid, player);//place the disk in the grid.
 			hasWonTheGame(player, positions, grid); //check if the player has won the game.
 			display(grid); // display the grid.
 		}
-	}while(gameIsOver != true);
+	}while(gameIsOver != true);//remove comments after testing.
 }
 
 /**
@@ -287,18 +286,14 @@ bool isEmpty(Grid& grid, Positions& positions){
  * @return: return a boolean value.
  */
 bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
-	fourInaRow four;
 	/**
 	 *check in the horizontal loop.
 	 */
 	cout << "Horizontal - ";
 	for(size_t i(0); i < grid[positions[0]].size(); ++i){
 		cout<<grid[positions[0]-1][i];
-		four.push_back(grid[positions[0]-1][i]);
 	}
 	cout << endl;
-
-	checkTheConnectFour(four, player);
 	//fourDisk = 0;
 	/**
 	 * check in the vertical loop.
@@ -385,16 +380,11 @@ bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
  * @param: the disc of the player.
  * @return: the number of player's disc in the row, column or diagonal.
  */
- void checkTheConnectFour(fourInaRow& four,Player& player){
-	bool fourDisk(false);
-	for(size_t i(0); i < four.size(); ++i){
-		if(player.disk == four[i]){
-			if((four[i] == four[i+1]) && (four[i+1] == four[i+2]) && (four[i+2] == four[i+3])){
-				++fourDisk; 
-			} 
-		}
-	}
-	cout << "\n";
-	cout << "player " << player.name << "[ "<< player.disk<< " ]"<<" have four disks in a row " << fourDisk<<" disks\n";
+int checkTheConnectFour(char colorDisk, Player& player){
+	int nbrOfDisk(0); // for the number of disk in a row.
 	
+	if(colorDisk == player.disk){
+		nbrOfDisk = colorDisk;
+	}
+	return nbrOfDisk; 
 }
