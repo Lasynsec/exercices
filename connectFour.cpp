@@ -14,30 +14,31 @@ enum Color {empty, red, yellow};
 struct Player{ //structure of the player.
 	int id;
 	string name;
-	bool hasWon;
-	Color disk;
+	bool hasWon; // if the player win or not.
+	Color disk; // color of the disk (red or yellow.
 };
 
 
 /*Typdef*/
 typedef array<array<Color,7>,6> Grid; // The grid of the game.
 typedef vector<Player> Players; // A array of players.
-typedef vector<char> colorsDisk; // A array of disk colors.
-typedef vector<int> fourInaRow;
-typedef array <int,2> Positions; // To store the position of the disk.
+typedef vector<char> colorsDisk; // A array of disks colors in the game.
+typedef vector<int> fourInaRow; // get a row of disks.
+typedef array <int,2> Positions; // get the position of the disk.
+typedef array <bool,4> WishDirection; // ?
 
 /*Prototypes*/
-void display(const Grid& grid); // Display the grid with disks.
+void display(const Grid& grid); // Display the grid with all disks.
 void initialisation(Grid& grid); // The game will start with empty cases;
 Player playerGenerator(int &id, colorsDisk& colorsVec); // create each player.
 void playersRegistration(Players& player);//Registrate each player.
 bool checkDuplicateDisk(char color, colorsDisk& colorVec);//Check if the same color has been chosen twice.
-Positions askPosition(Grid& grid, Player& player); // Ask to the players the next position of his disk.
-int askNumber(bool isVertical);// Ask the number to the player.
+Positions askPosition(Grid& grid, Player& player); // Ask to the player the next position in which to play.
+int askNumber(bool isVertical);// Ask numbers of the two positions to the player.
 void connectFour(Players& players, Grid& grid);// The whole game is handled here.
-bool isEmpty(Grid& grid, Positions& positions);//Check if the next position is free.
+bool isEmpty(Grid& grid, Positions& positions);//Check if the next chosen position is free.
 bool hasWonTheGame(Player& player, Positions& positions, Grid& grid); // check if the player has won.
-void checkTheConnectFour(fourInaRow& four,Player& player); //check if the player get a four row.
+bool checkTheConnectFour(fourInaRow& four,Player& player); //check if the player get a four row.
  
 int main(){
 	/*Grid initialisation*/
@@ -45,10 +46,10 @@ int main(){
 	initialisation(grid);	// initialise the grid.
 	
 	/*Players registration*/
-	//Players players; //------------------------------------// get rid of the comment after testing.
-	Players players = {{1,"emma",false,red},{2,"jenna",false,yellow}}; // remove the line after testing.
+	Players players; //------------------------------------// get rid of the comment after testing.
+	//Players players = {{1,"emma",false,red},{2,"jenna",false,yellow}}; // remove the line after testing.
 
-	//playersRegistration(players); //save the players.---------------------// get rid of the comment after testing.
+	playersRegistration(players); //save the players.---------------------// get rid of the comment after testing.
 	
 	/*Play the game*/
 	connectFour(players, grid);
@@ -185,7 +186,8 @@ Positions askPosition(Grid& grid, Player& player){
 	int horizontal; // for the player vertical position.
 	int vertical; // for the player horizontal position.
 	Positions positions; //for the disk position.
-	bool isempty;
+	bool isempty; // if the position is free.
+	bool horiFour(false);
 
 	do{
 		cout << "Player "<< "("<<player.id <<") "<< player.name <<": " << "\n";
@@ -197,17 +199,17 @@ Positions askPosition(Grid& grid, Player& player){
 		positions[0] = vertical;
 		positions[1] = horizontal;
 	
-		isempty = isEmpty(grid,positions);
+		isempty = isEmpty(grid,positions);// false or true.
 
-		if(isempty){
-			grid[vertical-1][horizontal-1] = player.disk;
+		if(isempty){ // if the futur position is free.
+			grid[vertical-1][horizontal-1] = player.disk; // put the player's disk in this position.
 		} else {
 			cout << endl;
 			cout <<"*Sorry but you cannot put a disk here !"<< endl;
 		}
-	}while(isempty != true);
+	}while(isempty != true); // ask until the futur position is free.
 
-	return positions;
+	return positions; // return the coordonate.
 }
 
 /**
@@ -252,13 +254,19 @@ int askNumber(bool isVertical){
  */
 void connectFour(Players& players, Grid& grid){
 	cout << "WELCOME TO CONNECTOR 4 !"<<endl;
-	bool gameIsOver(false);;
+	bool gameIsOver(false);
 	Positions positions; // For the position of the disk.
 	int checkFour(0);// check if the player reaches four disks in a row.
+
 	do{
 		for(auto player : players){ // all players must play.
 			positions = askPosition(grid, player);//place the disk in the grid.
-			hasWonTheGame(player, positions, grid); //check if the player has won the game.
+			gameIsOver = hasWonTheGame(player, positions, grid); //check if the player has won the game.
+			//cout << "\n game is over "<< gameIsOver<<"\n"; // delete after testing.
+			if(gameIsOver){
+				cout << "\n Well done "<< player.name <<", you've won the game !!!\n"; // delete after testing.
+				break;
+			}
 			display(grid); // display the grid.
 		}
 	}while(gameIsOver != true);
@@ -287,31 +295,37 @@ bool isEmpty(Grid& grid, Positions& positions){
  * @return: return a boolean value.
  */
 bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
-	fourInaRow four;
+	fourInaRow four;//will get all the row or column in a line.
+	WishDirection AllDirection;
+	
 	/**
-	 *check in the horizontal loop.
+	 *check in the horizontal direction.
 	 */
-	cout << "Horizontal - ";
+	//cout << "Horizontal : ";
 	for(size_t i(0); i < grid[positions[0]].size(); ++i){
-		cout<<grid[positions[0]-1][i];
+		//cout<<grid[positions[0]-1][i]<<"-";
 		four.push_back(grid[positions[0]-1][i]);
 	}
-	cout << endl;
+	
+	bool horiFour(false); // if the line of disks is in the horizontal;
+	horiFour = checkTheConnectFour(four, player); // check for the four disks.
+	four.clear(); //clear the array.
 
-	checkTheConnectFour(four, player);
-	//fourDisk = 0;
 	/**
-	 * check in the vertical loop.
+	 * check in the vertical direction.
 	 */
-	cout << "Vertical - ";
+	//cout << "Vertical : ";
 	for(size_t i(0); i < 6; ++i){
-		cout<<grid[i][positions[1]-1];
+		//cout<<grid[i][positions[1]-1]<<"-";
+		four.push_back(grid[i][positions[1]-1]);
 	}
+	bool vertiFour(false);
+	vertiFour = checkTheConnectFour(four, player);
+	four.clear(); //cleart the array.
 
 	/**
-	 * check in the diagonal loop from left.
+	 * check in the diagonal direction (from left).
 	 */
-	//fourDisk = 0;
 	Positions intercept; // first we find the intercept if x = 0, what is y.
 	int b(0);
 	int y(0);
@@ -323,8 +337,6 @@ bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
 	b = y - x;
 	inversedY = 6-b+1; // inversed intercept for the programme.
 
-	cout << endl;
-
 	// Y-intecept.
 	// Put a condition here.
 	if(inversedY-1 > 6){
@@ -335,15 +347,20 @@ bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
 		intercept[1] = 0;
 	}
 	
-	cout << "Diagonal R - ";
+	//cout << "Diagonal R : ";
 	for(size_t i(0); i < 6; ++i){
-		if((intercept[0] < 6 && intercept[0] >= 0) && (intercept[1] < 7 && intercept[1] >= 0)){
-			cout << grid[intercept[0]--][intercept[1]++];
+		if(((intercept[0] - i) < 6 && (intercept[0] - i) >= 0) && ((intercept[1] + i) < 7 && (intercept[1] + i) >= 0)){
+			//cout << grid[intercept[0] - i][intercept[1] + i] << "-";
+			four.push_back(grid[intercept[0] - i][intercept[1] + i]);
 		}
 	}
+	bool diagRFour(false);
+	diagRFour = checkTheConnectFour(four, player);
+	four.clear(); //clear the array.
 
 	/**
-	 * check in the diagonal loop from right.
+	 * check in the diagonal direction (from left).
+	 *
 	 */
 	Positions leftDiagYIntercept;
 	int mirrorB(0);
@@ -355,7 +372,6 @@ bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
 	int leftMirrorB(0);
 	int leftMirrorInversedY(0);
 
-	cout << endl;
 	mirrorY = 6 -1 * (inputYUser - 1);
 	mirrorB = mirrorY - inputXUser;
 	leftMirrorB = mirrorY + inputXUser;
@@ -370,31 +386,53 @@ bool hasWonTheGame(Player& player, Positions& positions, Grid& grid){
 		leftDiagYIntercept[0] = leftDiagonal;
 		leftDiagYIntercept[1] = 0;
 	}
-	cout << "Diagonal L - ";
+	//cout << "Diagonal L - ";
+	int testValue(0);
 	for(size_t i(0); i < 6; ++i){
-		if((leftDiagYIntercept[0] < 6 && leftDiagYIntercept[0] >= 0) && (leftDiagYIntercept[1] < 7 && leftDiagYIntercept[1] >= 0)){
-			cout << grid[leftDiagYIntercept[0]++][leftDiagYIntercept[1]++];
+		if(((leftDiagYIntercept[0] + i) < 6 && (leftDiagYIntercept[0] + i) >= 0) && ((leftDiagYIntercept[1] + i) < 7 && (leftDiagYIntercept[1] + i) >= 0)){
+		//	cout << grid[leftDiagYIntercept[0]+i][leftDiagYIntercept[1]+i]<<"-";
+			four.push_back(grid[leftDiagYIntercept[0]+i][leftDiagYIntercept[1]+i]);
 		}
 	}
+	
+	bool diagLFour(false);
+	diagLFour = checkTheConnectFour(four, player);
+	four.clear(); //clear the array.
+
+	AllDirection[0] = horiFour;
+	AllDirection[1] = vertiFour;
+    AllDirection[2] = diagLFour;
+	AllDirection[3] = diagRFour;
+
+
+	bool heWonPtr(false);
+	for(size_t i(0); i < AllDirection.size(); ++i){
+		if(AllDirection[i]){
+			heWonPtr =  AllDirection[i];
+		}
+	}
+	return heWonPtr;
 }
 
 
 /**
- * Check if the player has four colors.
+ * Check if the player has four times the same colors.
  * @param: the discs in the grid.
  * @param: the disc of the player.
  * @return: the number of player's disc in the row, column or diagonal.
  */
- void checkTheConnectFour(fourInaRow& four,Player& player){
+ bool checkTheConnectFour(fourInaRow& four,Player& player){
 	bool fourDisk(false);
+	//cout << "\n Disk = ";
 	for(size_t i(0); i < four.size(); ++i){
 		if(player.disk == four[i]){
-			if((four[i] == four[i+1]) && (four[i+1] == four[i+2]) && (four[i+2] == four[i+3])){
-				++fourDisk; 
+			//cout << four[i]<<" - ";
+			if((four[i] == four[i+1]) && (four[i+1] == four[i+2]) && (four[i+2] == four[i+3])){ //if we have four time the same color in a row.
+				fourDisk = true; 
 			} 
 		}
 	}
-	cout << "\n";
-	cout << "player " << player.name << "[ "<< player.disk<< " ]"<<" have four disks in a row " << fourDisk<<" disks\n";
-	
-}
+	//cout << "\n";
+	//cout << "player " << player.name << "[ "<< player.disk<< " ]"<<" have four disks in a row " << fourDisk<<" disks\n";
+	return fourDisk;
+ }
