@@ -10,16 +10,18 @@ enum Disks {empty,one,two,three};
 
 //Typedef
 typedef array<array<int,3>,3> Towers; // the three towers.
+typedef array<int,2> PriorPosition;
 
 //Prototypes
 void initialisation(Towers& towers);
 void display(const Towers& towers);
 Disks pickUpDisk();
-void RemoveDisk(Towers& towers, Disks disk);
-void MoveDisk(Towers& towers, Disks disk);
+PriorPosition RemoveDisk(Towers& towers, Disks disk);
+void MoveDisk(Towers& towers, Disks disk, PriorPosition& lastPosition);
 int chooseTower();
 bool IspossibleToPlay(int row, int column, Towers& towers,Disks disk);
 void HanoiManagment(Towers& towers);
+bool CanPickThisOne(Towers& towers, Disks disk);
 
 int main(){
 
@@ -32,14 +34,8 @@ int main(){
 	//We display the game
 	cout << "WELCOME TO HANOI 2017 !!!"<<endl;
 	
-	//----------------------------------/Test
-//	Disks chosenDisk(pickUpDisk());
-//	RemoveDisk(towers,chosenDisk);
-//	MoveDisk(towers, chosenDisk);
-	//----------------------------------/Test
-	
+	//The game is managed here.
 	HanoiManagment(towers);
-	//display(towers);
 
 	return 0;
 }
@@ -150,15 +146,20 @@ Disks pickUpDisk(){
  * Remove the chosen disk from the current tower.
  * @param: the towers.
  * @param: the disk.
+ * @return: the last position of the disk.
  */
-void RemoveDisk(Towers& towers, Disks disk){
+PriorPosition RemoveDisk(Towers& towers, Disks disk){
+	PriorPosition getPosition;
 	for(size_t row(0); row < towers.size(); ++row){
 		for(size_t column(0); column < towers[row].size(); ++column){
 			if(towers[row][column] == disk){
+				getPosition[0] = row;
+				getPosition[1] = column;
 				towers[row][column] = empty;
 			}
 		}
 	}
+	return getPosition;
 }
 
 
@@ -166,30 +167,35 @@ void RemoveDisk(Towers& towers, Disks disk){
  * Move disk from a tower to another one.
  * @param: all towers.
  * @param: the disk to move.
+ * @param: the last position of the current disk befor moving it.
  */
-void MoveDisk(Towers& towers, Disks disk){
+void MoveDisk(Towers& towers, Disks disk, PriorPosition& lastPosition){
 	bool canPlayIt(false);
 	int column(0);
 	vector <bool>wrongMovment;
 	
+	// Choose the next tower to place the disk.
 	column = chooseTower();
-	
+
+	// Loop through the chosen tower and check if it's possible to play here.
 	for(int row(towers.size()-1); row > -1; --row){	
 		 canPlayIt = IspossibleToPlay(row,column,towers,disk);
-		 cout << "Is it a good play: "<< canPlayIt <<"\n";
-		 if(canPlayIt){
-			towers[row][column] = disk;
+		 if(canPlayIt){//if ok.
+			towers[row][column] = disk;//place the disk here.
 		 } 	
-		wrongMovment.push_back(canPlayIt);
+		// get the situation of the tower.
+		wrongMovment.push_back(canPlayIt); 
 	}
-	
+	// if it's not possible to play here, we return in the last position.	
 	if((wrongMovment[0] + wrongMovment[1]+ wrongMovment[2]) == 0){
-		// put back the disk in his position.
+		towers[lastPosition[0]][lastPosition[1]] = disk; 
+		cout << " - Sorry but you cannot place your disk here !\n";
 	}
 }
 
 /**
  * choose a tower to place the disk.
+ * @return: the input of the player.
  */
 int chooseTower(){
 	char tower;
@@ -217,24 +223,27 @@ int chooseTower(){
 	return nbrTower; 
 }
 
+/**
+ * Check if it's possible to play in the chosen tower.
+ * @param: row, the number of the line.
+ * @param: column, the number of the column.
+ * @param: the towers.
+ * @param: the disk.
+ * @return: return a bolean, that say if the player can or cannot play in this position.
+ */
 bool IspossibleToPlay(int row, int column, Towers& towers, Disks disk){
 	bool canPlay(false);
 	if(row == 2){
-	cout << "Row value is : "<< row<<"\n";
 		if(towers[row][column] == empty){
 			canPlay = true;
 		}
 	}else if(row == 1){
-	cout << "Row value is : "<< row<<"\n";
 		if((towers[row][column] == empty) 
 				&& (disk != towers[2][column]) 
 					&& (disk < towers[2][column])){
 			canPlay = true;
 		}
 	}else if(row == 0){
-	cout << "Row value is : "<< row<<"\n";
-	cout << "level 2 is "<<towers[2][column]<<"\n";
-	cout << "Level 1 is "<< towers[1][column]<<"\n";
 		if((towers[row][column] == empty) 
 				&& (disk != towers[1][column]) 
 					&& (disk < towers[1][column])
@@ -247,14 +256,52 @@ bool IspossibleToPlay(int row, int column, Towers& towers, Disks disk){
 
 /**
  * The game is handled here.
+ * @param: the towers.
  */
 void HanoiManagment(Towers& towers){
 	bool gameIsOver(false);
+	Disks chosenDisk;
+	PriorPosition lastPosition;
+	bool canPickThis;
+
 	do{	
-		Disks chosenDisk(pickUpDisk());
-		RemoveDisk(towers,chosenDisk);
-		MoveDisk(towers, chosenDisk);
-		
+		do{
+			//We choose the disk.
+			chosenDisk = pickUpDisk();
+			//We check if the player can take the disk.
+			canPickThis = CanPickThisOne(towers, chosenDisk);
+			
+			if(not canPickThis){
+				cout << " - you cannot take this disk !\n";
+			}
+		}while(not canPickThis);
+
+		//We remove the disk from the last position.
+		lastPosition = RemoveDisk(towers,chosenDisk);
+		//We put the disk in the chosen position.
+		MoveDisk(towers, chosenDisk, lastPosition);
+		//We display the game here.	
 		display(towers);
 	}while(not gameIsOver);
+}
+
+/**
+ * Check if the player can take this disk.
+ */
+bool CanPickThisOne(Towers& towers, Disks disk){
+	bool canPickThis(false);
+	for(size_t i(0); i < towers.size(); ++i){
+		for(size_t j(0); j < towers[i].size(); ++j){
+			if(towers[i][j] == disk){
+				if(towers[i-1][j] != one 
+						and towers[i-1][j] != two
+							and towers[i-1][j] != three){
+					canPickThis = true;
+				} else {
+					canPickThis = false;
+				}
+			}
+		}
+	}
+	return canPickThis; 
 }
