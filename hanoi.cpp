@@ -32,8 +32,11 @@ int main(){
 	initialisation(towers);
 
 	//We display the game
-	cout << "WELCOME TO HANOI 2017 !!!"<<endl;
-	
+	cout << "WELCOME TO MY HANOI GAME !!!"<<endl;
+		
+	//We display the game here.	
+	display(towers);
+
 	//The game is managed here.
 	HanoiManagment(towers);
 
@@ -280,6 +283,12 @@ void HanoiManagment(Towers& towers){
 		lastPosition = RemoveDisk(towers,chosenDisk);
 		//We put the disk in the chosen position.
 		MoveDisk(towers, chosenDisk, lastPosition);
+
+		//Check if the game is over.
+		if(towers[0][2] == 1){
+			gameIsOver = true;
+			cout << "Congratulation you've won !!!\n";
+		}
 		//We display the game here.	
 		display(towers);
 	}while(not gameIsOver);
