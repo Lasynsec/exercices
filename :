@@ -1,0 +1,132 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+/**
+ * Classe Spectator.
+ */
+class Spectator
+{
+	public:
+		/**
+		 * Getter age
+		 * @return the member age_
+		 */
+		int age() const { return age_; }
+		/**
+		 * Getter money
+		 * @return: the member money.
+		 */
+		int money() const { return money_; }
+
+		/**
+		 * Setter age
+		 * @param: a number of int representing the amount of money.
+		 * @return: if valid return asign the param to the membe variable.
+		 */
+		void money(int mo){
+			money_ = mo;
+		}
+
+	private:
+		//Members.
+		int age_;
+		int money_;
+};
+
+/**
+ * Class Assistant.
+*/ 
+class Assistant{
+	public:	
+		/**
+		* Getter spectator age.
+		*/
+		int spectatorAge() const { return spectatorAge_; }
+		/**
+		* Getter spectator money.
+		*/
+		int spectatorMoney() const { return spectatorMoney_; }
+		
+		/**
+		* Setter spectator age.
+		* @param: the age of the spe
+		*/
+		void spectatorAge(int age){
+			spectatorAge_ = age;	
+		}
+		/**
+		 * Setter spectator money. 
+		 */
+		void spectatorMoney(int money){
+			spectatorMoney_ = money; 
+		}
+
+	private:
+		int spectatorAge_; // the funded age of the spectator.
+		int spectatorMoney_; // the funded money of the spectator.
+
+};
+
+/**
+ * Class Magician.
+ */
+class Magician {
+	public:
+		/**
+		 *	
+		 */
+		int userInput(string question){
+			int numberFromUser(0);
+			bool isCorrect = true;
+			do{
+				cout <<"Write down your "<< question <<"\n";
+				if(!(cin >> numberFromUser)){
+					cin.clear();
+					cin.ignore(1000,'\n');
+					cout << "Number only please ! : ";
+					isCorrect = false;
+				} else {
+					if(numberFromUser < 1 || numberFromUser > 100){
+						cout << "Your number is not in the good : ";
+						isCorrect = false;
+					}
+				}
+			}while(isCorrect);
+			return numberFromUser;
+		}
+		/**
+		 * Add 115 to the assistant result.
+		 */
+		int addOneHundredFifteen(int assistantResult){
+			int finalResult;
+			int addOneHundredFifteen(assistantResult + 115);
+
+			return finalResult;
+		}
+
+		/**
+		 * Getter the question to ask.
+		 */
+		string question() const { return question_; }
+
+	private:
+		string question_="Write down your age and the amount of money you do have in your pocket , please."; // The question to ask to the spectator.
+};
+
+/**
+ * Class Paper
+ */
+class Paper{
+	public:
+		
+
+	private:
+}
+int main(){
+	Magician mag; // the magician.
+	cout << "[The magician] -"<< mag.question()<<"\n";
+	mag.userInput();
+	return 0;
+}
