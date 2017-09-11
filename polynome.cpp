@@ -115,12 +115,12 @@ ostream& operator<<(ostream&, Polynomial const&);
 //------------------------------------------------------//Main.
 int main(){
 	Monomial one(2.0,2);//test monomial.
-	Monomial two(-2.0,0);//test monomial.
-	Monomial three(-1.0,0);//test monomial.
+	//Monomial two(-2.0,1);//test monomial.
+	//Monomial three(-1.0,0);//test monomial.
 
 	Monomial four(-1.0,2);//test monomial.
-	Monomial five(-15.0,0);//test monomial.
-	Monomial six(-6.0,0);//test monomial.
+	//Monomial five(-15.0,1);//test monomial.
+	//Monomial six(-6.0,0);//test monomial.
 	
 	//test polynomial ostream.
 	Polynomial p;
@@ -130,7 +130,7 @@ int main(){
 	
 	Polynomial q;
 	q.addMonomials(four);
-	q.addMonomials(five);
+	//q.addMonomials(five);
 	//q.addMonomials(six);
 
 	p.reorder();//check if the polynome is in a decremental organisation.
@@ -415,9 +415,10 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		}
 
 		// Let free the memory used by addon.
-		delete addon;
-		addon = 0;
-
+		if(needAddon){
+			delete addon;
+			addon = 0;
+		}
 		//we simplifly the result of the main poly (p).
 		simplification(); 
 		reorder();
