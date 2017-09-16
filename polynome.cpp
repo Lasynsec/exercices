@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include <utility>
+#include <stdlib.h> //for debugging
 
 using namespace std;
 
@@ -74,6 +74,7 @@ class Polynomial{
 
 		//Default construct for the founded result.
 		Polynomial():res_(15) {}
+
 		//Construct one monomial polynome.
 		Polynomial(double coef):terms_(1,coef) {}
 
@@ -94,8 +95,9 @@ class Polynomial{
 
 		//Overload operator
 		Polynomial operator*(const Polynomial&) const; //done. 
-		Polynomial operator*(double) const;//working on it.
+		Polynomial operator*(double) const;//done.
 		Polynomial& operator*=(const Polynomial&); //done.
+		Polynomial& operator*=(double); //done.
 
 		
 		//Simplified the result.
@@ -108,9 +110,10 @@ class Polynomial{
 double userCoef();
 Polynomial polyMaker();
 
-//Operators
+//External overload operator.
 ostream& operator<<(ostream&, Monomial const&);
 ostream& operator<<(ostream&, Polynomial const&);
+Polynomial operator*(double, Polynomial const&);
 
 //------------------------------------------------------//Main.
 int main(){
@@ -135,11 +138,16 @@ int main(){
 
 	p.reorder();//check if the polynome is in a decremental organisation.
 
-	//cout <<"("<<p <<")"<< " *= "<<"("<< q<<")"<< "= ";
-	//cout << (p*=q) <<endl;// we multiply here.
+	/*cout <<"("<<p <<")"<< " *= "<<"("<< q<<")"<< "= ";
+	cout << (p*=q) <<endl;// we multiply here.
 	Polynomial r(p*q);
-	cout <<"("<<p <<")"<< " * "<<"("<< q<<")"<< "= "<< r <<endl;// we multiply here.
-	//cout <<"("<<p <<")"<< " * "<<"(5)"<< "= "<< p*6.0 <<endl;// we multiply here.
+	cout <<"("<<p<<")"<< " * "<<"("<< q<<")"<< "= "<< r <<endl;// we multiply here.
+	cout <<"("<<p<<")"<< " * "<<"(5)"<< " = "<< p*5.0 <<endl;// we multiply here.
+	cout <<"("<<p<<")"<< " *= "<<"(7)"<< " = ";
+	cout << (p*=7.0) << endl;// we multiply here.*/
+	cout <<"(8)"<<" * ("<<p<<")"<< " = ";
+	//cout << 8.0*p << endl;// we multiply here.
+	cout << p*8.0 << endl;// we multiply here.
 
 	return 0;
 }
@@ -301,36 +309,31 @@ void Polynomial::simplification(result& res){
 	}
 }
 
-/**
- * Overload operator to find the less value of two monomials.
- */
-bool Monomial::operator<(Monomial const& mo) const{
-	return (power() < mo.power());
-}
-/**
- * Overload operator to check if the value of two monomials are the same.
- */
-bool Monomial::operator==(Monomial const& mo) const{
-	return (power() == mo.power() and coeficient() == mo.coeficient());
-}
 
 /**
  * Overload operator two multiply a monomial by another one.
  */
 Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		bool needAddon(true); //If we need to extend the terms vector.
+
 		//The difference of monomials between P and Q.
 		int difference = poly.terms().size() - terms().size();
 		
 		//Get the size of vector Q.
 		int sizeOfQ = poly.terms().size();
 		
+		//Get size of the vector P.
+		int sizeOfP = terms().size();
+
 		//Create  a subvector for the vector terms().
 		monomials *addon;
 		
-		cout <<"poly size "<<sizeOfQ<<", value element: "<< poly.terms()[0].coeficient()<<endl;
+		//test vectors values and sizes.
+		cout <<"Q size "<<sizeOfQ<<", value of the first element of Q: "<< poly.terms()[0].coeficient()<<endl;
+		cout <<"P size "<<sizeOfP<<", value of the first element of P: "<< terms()[0].coeficient()<<endl;
+
 		/**
-		 * Use dynamic allocation to merge a temp vector to res vector. 
+		 * Use dynamic allocation to merge a temp vector to term vector. 
 		 */
 		cout << "The difference before swap: "<<difference<<endl;
 		if(difference > 0){
@@ -348,10 +351,21 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				addon = new monomials(2);
 			}else{
 				needAddon = false; //We doen't need to extend the value.
-				cout << "Size of Q is one"<<endl;
+				cout <<"the addon is not required"<<endl;
 			}
-		}else{
-			cout << "the difference is sub zero."<<endl;
+		}else{ 
+			int termSize = terms().size();
+			if(difference == -1){
+				if(termSize == 3 and sizeOfQ == 2){
+					addon = new monomials(2);
+				}else if(termSize == 2 and sizeOfQ == 1){
+					addon = new monomials(1);
+				}
+			}else if(difference == -2){
+				if(termSize == 3 and sizeOfQ == 1){
+					addon = new monomials(3);
+				}
+			}
 		}
 		
 		if(needAddon){
@@ -365,11 +379,13 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		 * The loop will multiplicate the two polynomials.
 		 * and put the founded new monomials in a vector(res_).
 		 */
+		cout << "Size of res here is : "<<res().size()<<endl;
+		//cout << "Size of res poly here is"<<poly.res().size()<<endl;
 		size_t v(0);
 		for(size_t i(0); i < terms().size(); ++i){
 			for(size_t j(0); j < poly.terms().size(); ++j){
-				res()[v].power(terms()[i].power() + poly.terms()[j].power());
-				res()[v].coeficient(terms()[i].coeficient() * poly.terms()[j].coeficient());
+				res()[v].power(terms()[i].power() + poly.terms()[j].power()); // The addition of the exposant 'monomials from each polynomials.
+				res()[v].coeficient(terms()[i].coeficient() * poly.terms()[j].coeficient()); //The multiplication of monomials from each polynomials.
 				++v;
 			}
 		}
@@ -417,8 +433,9 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		// Let free the memory used by addon.
 		if(needAddon){
 			delete addon;
-			addon = 0;
 		}
+		addon = 0; //The pointer must be anyway pointed to null.
+
 		//we simplifly the result of the main poly (p).
 		simplification(); 
 		reorder();
@@ -426,6 +443,8 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		return *this;
 }
 
+
+//************internal Overload operator methode.
 /**
  * Overload operator: two multiply a polynomial by another one.
  */
@@ -440,3 +459,31 @@ Polynomial Polynomial::operator*(double d) const{
 	return Polynomial(*this) *= Polynomial(d);
 }
 
+/**
+ * 
+ */
+Polynomial& Polynomial::operator*=(double d){
+	return (*this *= Polynomial(d)); 	
+}
+
+/**
+ * Overload operator to find the less value of two monomials.
+ */
+bool Monomial::operator<(Monomial const& mo) const{
+	return (power() < mo.power());
+}
+
+/**
+ * Overload operator to check if the value of two monomials are the same.
+ */
+bool Monomial::operator==(Monomial const& mo) const{
+	return (power() == mo.power() and coeficient() == mo.coeficient());
+}
+
+
+//************externalt Overload operator function.
+/*
+ */
+Polynomial operator*(double d, Polynomial const& c){
+	return (Polynomial(d) * c);
+}
