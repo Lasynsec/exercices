@@ -6,7 +6,6 @@
 using namespace std;
 
 
-//Typedef degree.
 typedef unsigned int degree;
 
 /**
@@ -84,8 +83,9 @@ class Polynomial{
 		//Setters
 		monomials& res() {return res_;} 
 
-		//Add monomials.	
+		//Add a monomial in the .	
 		void addMonomials(Monomial const&);
+		void addMonomials(monomials const&);
 		
 		//Decremental order.
 		void exchange(Monomial&, Monomial&);
@@ -106,48 +106,59 @@ class Polynomial{
 };
 
 
-//Prototypes functions
-double userCoef();
-Polynomial polyMaker();
 
 //External overload operator.
 ostream& operator<<(ostream&, Monomial const&);
 ostream& operator<<(ostream&, Polynomial const&);
 Polynomial operator*(double, Polynomial const&);
 
+//Prototypes functions
+double userCoef();
+Polynomial polyMaker();
+void debugging(Polynomial&,const Polynomial&);
+
 //------------------------------------------------------//Main.
 int main(){
 	Monomial one(2.0,2);//test monomial.
-	//Monomial two(-2.0,1);//test monomial.
-	//Monomial three(-1.0,0);//test monomial.
-
+	Monomial two(-5.0,1);//test monomial.
+	Monomial three(-1.0,0);//test monomial.
+	//--*
 	Monomial four(-1.0,2);//test monomial.
-	//Monomial five(-15.0,1);//test monomial.
-	//Monomial six(-6.0,0);//test monomial.
-	
-	//test polynomial ostream.
-	Polynomial p;
-	p.addMonomials(one);
-	//p.addMonomials(two);
-	//p.addMonomials(three);
-	
-	Polynomial q;
-	q.addMonomials(four);
-	//q.addMonomials(five);
-	//q.addMonomials(six);
+	Monomial five(-15.0,1);//test monomial.
+	Monomial six(-6.0,2);//test monomial.
+	//--*
+	Monomial seven(9.0,2);//test monomial.
+	Monomial eight(-5.0,1);//test monomial.
+	Monomial nine(-3.0,0);//test monomial.
+	//--*
+	Monomial ten(-6.0,2);//test monomial.
+	Monomial eleven(-4.0,1);//test monomial.
+	Monomial twelve(-7.0,0);//test monomial.
 
-	p.reorder();//check if the polynome is in a decremental organisation.
+	Polynomial p1;
+	p1.addMonomials((monomials){one,two,three});//cast the unknown vector for the function argument.
+	
+	Polynomial p2;
+	p2.addMonomials((monomials){four,five});
+	
+	Polynomial p3;
+	p3.addMonomials((monomials){seven,eight,nine});
 
-	/*cout <<"("<<p <<")"<< " *= "<<"("<< q<<")"<< "= ";
-	cout << (p*=q) <<endl;// we multiply here.
-	Polynomial r(p*q);
-	cout <<"("<<p<<")"<< " * "<<"("<< q<<")"<< "= "<< r <<endl;// we multiply here.
-	cout <<"("<<p<<")"<< " * "<<"(5)"<< " = "<< p*5.0 <<endl;// we multiply here.
-	cout <<"("<<p<<")"<< " *= "<<"(7)"<< " = ";
-	cout << (p*=7.0) << endl;// we multiply here.*/
-	cout <<"(8)"<<" * ("<<p<<")"<< " = ";
-	//cout << 8.0*p << endl;// we multiply here.
-	cout << p*8.0 << endl;// we multiply here.
+	Polynomial p4;
+	p4.addMonomials((monomials){ten,eleven,twelve});
+
+	Polynomial p5;
+	p5.addMonomials(six);
+	
+	cout <<"("<<p1 <<")"<< " *= "<<"("<< p2<<")"<< " = ";
+	cout << (p1*=p2) <<endl;// we multiply here.
+	Polynomial r(p3*p4);
+	cout <<"("<<p3<<")"<< " * "<<"("<< p4<<")"<< " = "<< r <<endl;// we multiply here
+	cout <<"("<<p2<<")"<< " * "<<"(5)"<< " = "<< p2*5.0 <<endl;// we multiply here.
+	cout <<"("<<p4<<")"<< " *= "<<"(7)"<< " = ";
+	cout << (p4*=7.0) << endl;// we multiply here.
+	cout <<"(8)"<<" * ("<<p5<<")"<< " = ";
+	cout << 8.0*p5 << endl;// we multiply here.
 
 	return 0;
 }
@@ -211,6 +222,11 @@ void Polynomial::addMonomials(Monomial const&  monom){
 	terms_.push_back(monom);
 }
 
+void Polynomial::addMonomials(monomials const& monov){
+	for(size_t i(0);  i < monov.size();++i){
+		terms_.push_back(monov[i]);
+	}
+}
 /**
  * Exchange the monomials position in the array. 
  * @param: the first monomial.
@@ -314,8 +330,9 @@ void Polynomial::simplification(result& res){
  * Overload operator two multiply a monomial by another one.
  */
 Polynomial& Polynomial::operator*=(const Polynomial& poly){
-		bool needAddon(true); //If we need to extend the terms vector.
-
+		//If we need to extend the terms vector.
+		bool needAddon(true);
+		
 		//The difference of monomials between P and Q.
 		int difference = poly.terms().size() - terms().size();
 		
@@ -327,15 +344,10 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 
 		//Create  a subvector for the vector terms().
 		monomials *addon;
-		
-		//test vectors values and sizes.
-		cout <<"Q size "<<sizeOfQ<<", value of the first element of Q: "<< poly.terms()[0].coeficient()<<endl;
-		cout <<"P size "<<sizeOfP<<", value of the first element of P: "<< terms()[0].coeficient()<<endl;
 
 		/**
 		 * Use dynamic allocation to merge a temp vector to term vector. 
 		 */
-		cout << "The difference before swap: "<<difference<<endl;
 		if(difference > 0){
 			if(difference == 1 and sizeOfQ == 3){
 				addon = new monomials(3);
@@ -351,7 +363,6 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				addon = new monomials(2);
 			}else{
 				needAddon = false; //We doen't need to extend the value.
-				cout <<"the addon is not required"<<endl;
 			}
 		}else{ 
 			int termSize = terms().size();
@@ -359,28 +370,37 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				if(termSize == 3 and sizeOfQ == 2){
 					addon = new monomials(2);
 				}else if(termSize == 2 and sizeOfQ == 1){
-					addon = new monomials(1);
+					//addon = new monomials(1);
+					needAddon = false;
 				}
 			}else if(difference == -2){
 				if(termSize == 3 and sizeOfQ == 1){
-					addon = new monomials(3);
+					addon = new monomials(1);
 				}
 			}
 		}
-		
 		if(needAddon){
 			monomials inserting;
 			inserting = (*addon); //Affect the value of object pointed.
 
 			//Insert the addon pointer vector into the terms vector for the result.
-			terms_.insert(terms_.end(), inserting.begin(), inserting.end());
+			terms_.insert(terms_.end(), inserting.begin(), inserting.end());//add in the end of the terms vector the pointer vector.
+		}
+		
+		/**
+		 * We create dinamycally 15 elements in the res vector if not there are not already there  
+		 */
+		bool needAddonRes(false);
+		monomials *addonRes; 
+		if(res().size() == 0){
+			addonRes = new monomials(15);
+			res().insert(res().begin(), (*addonRes).begin(), (*addonRes).end());
+			needAddonRes = true;
 		}
 		/**
 		 * The loop will multiplicate the two polynomials.
 		 * and put the founded new monomials in a vector(res_).
 		 */
-		cout << "Size of res here is : "<<res().size()<<endl;
-		//cout << "Size of res poly here is"<<poly.res().size()<<endl;
 		size_t v(0);
 		for(size_t i(0); i < terms().size(); ++i){
 			for(size_t j(0); j < poly.terms().size(); ++j){
@@ -389,7 +409,7 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				++v;
 			}
 		}
-		
+		//debugging(*this,poly);
 		// Set the result in a decremental organisation and simplify.
 		reorder(res());
 		simplification(res());
@@ -434,11 +454,18 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		if(needAddon){
 			delete addon;
 		}
-		addon = 0; //The pointer must be anyway pointed to null.
+
+		if(needAddonRes){
+			delete addonRes;
+		}
 
 		//we simplifly the result of the main poly (p).
 		simplification(); 
 		reorder();
+
+		//The pointeris must be anyway pointed to null.
+		addon = 0; 
+		addonRes = 0;
 
 		return *this;
 }
@@ -487,3 +514,41 @@ bool Monomial::operator==(Monomial const& mo) const{
 Polynomial operator*(double d, Polynomial const& c){
 	return (Polynomial(d) * c);
 }
+
+//------------//Debug
+void debugging(Polynomial& p,const Polynomial& poly){
+	cout << "p.perms:";
+	for(size_t i(0); i < p.terms().size();++i){
+		cout << "["<<p.terms()[i].coeficient()<<"x^"<<p.terms()[i].power()<<"] ";	
+	}
+	cout <<endl;
+	cout << "poly.perms:";
+	for(size_t i(0); i < poly.terms().size();++i){
+		cout << "["<<poly.terms()[i].coeficient()<<"x^"<<poly.terms()[i].power()<<"] ";	
+	}
+	cout <<endl;
+	cout<<"------"<<endl;	
+	size_t v(0);
+	for(size_t i(0); i < p.terms().size(); ++i){
+		for(size_t j(0); j < poly.terms().size(); ++j){
+			cout << "p.res("<<"power of p["<<i<<"]->"<<p.terms()[i].power()
+				<<" + "<< "power of poly["<<j<<"]->"<<poly.terms()[j].power()
+				<<")="<<p.terms()[i].power()+poly.terms()[j].power()<<endl; // The addition of the exposant 'monomials from each polynomials.
+			cout << "p.res("<<"coeficient of p["<<i<<"]->"<<p.terms()[i].coeficient()
+				<<" * "<< "coeficient of poly["<<j<<"]->"<<poly.terms()[j].coeficient()
+				<<")="<<p.terms()[i].coeficient()*poly.terms()[j].coeficient()<<endl; //The multiplication of monomials from each polynomials.
+			++v;
+		}
+		cout<<"-----"<<endl;
+	}
+
+	cout << "p.res..."<<endl;
+	for(size_t i(0); i < p.res().size();++i){
+		cout <<"["<<i<<"]"<<p.res()[i].coeficient()<<"^"<<p.res()[i].power()<<endl;	
+	}
+
+	cout<<"The value of p is: "<<p<<endl;
+	cout<<"The value of poly is: "<<poly<<endl;
+	abort();
+}
+
