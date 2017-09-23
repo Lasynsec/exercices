@@ -98,6 +98,7 @@ class Polynomial{
 		Polynomial operator*(double) const;//done.
 		Polynomial& operator*=(const Polynomial&); //done.
 		Polynomial& operator*=(double); //done.
+		Polynomial& operator+=(const Polynomial&); //working on it.
 
 		
 		//Simplified the result.
@@ -115,7 +116,8 @@ Polynomial operator*(double, Polynomial const&);
 //Prototypes functions
 double userCoef();
 Polynomial polyMaker();
-void debugging(Polynomial&,const Polynomial&);
+void debuggingMulti(Polynomial&,const Polynomial&);
+void debuggingAddi(Polynomial&,const Polynomial&);
 
 //------------------------------------------------------//Main.
 int main(){
@@ -149,7 +151,7 @@ int main(){
 
 	Polynomial p5;
 	p5.addMonomials(six);
-	
+/*	
 	cout <<"("<<p1 <<")"<< " *= "<<"("<< p2<<")"<< " = ";
 	cout << (p1*=p2) <<endl;// we multiply here.
 	Polynomial r(p3*p4);
@@ -159,7 +161,8 @@ int main(){
 	cout << (p4*=7.0) << endl;// we multiply here.
 	cout <<"(8)"<<" * ("<<p5<<")"<< " = ";
 	cout << 8.0*p5 << endl;// we multiply here.
-
+*/
+	cout<<"("<<p1<<")"<<" + " <<"("<<p2<<")"<<" = "<<(p1+=p2)<<endl;
 	return 0;
 }
 //----------------------------------------------------// End main.
@@ -327,7 +330,7 @@ void Polynomial::simplification(result& res){
 
 
 /**
- * Overload operator two multiply a monomial by another one.
+ * Overload operator to multiply a monomial by another one.
  */
 Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		//If we need to extend the terms vector.
@@ -409,7 +412,6 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				++v;
 			}
 		}
-		//debugging(*this,poly);
 		// Set the result in a decremental organisation and simplify.
 		reorder(res());
 		simplification(res());
@@ -469,9 +471,21 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 
 		return *this;
 }
-
-
-//************internal Overload operator methode.
+/**
+ * Overload operator for the addition.
+ */
+Polynomial& Polynomial::operator+=(const Polynomial& poly){
+	for(size_t i(0); i < terms().size(); ++i){
+		for(size_t j(0); j < poly.terms().size();++j){
+			if(terms()[i].power() == poly.terms()[j].power()){
+				terms_[i].coeficient(terms()[i].coeficient()+poly.terms()[j].coeficient());
+			}
+		}
+	}
+	//debuggingAddi(*this,poly);
+	return *this;
+}
+//-------------internal Overload operator* methode*.
 /**
  * Overload operator: two multiply a polynomial by another one.
  */
@@ -516,7 +530,12 @@ Polynomial operator*(double d, Polynomial const& c){
 }
 
 //------------//Debug
-void debugging(Polynomial& p,const Polynomial& poly){
+/**
+ * Fonction for debugging the multiplication operators
+ * @argm: two polynomials objects.
+ */
+void debuggingAddi(Polynomial& p,const Polynomial& poly);
+void debuggingMulti(Polynomial& p,const Polynomial& poly){
 	cout << "p.perms:";
 	for(size_t i(0); i < p.terms().size();++i){
 		cout << "["<<p.terms()[i].coeficient()<<"x^"<<p.terms()[i].power()<<"] ";	
@@ -547,6 +566,48 @@ void debugging(Polynomial& p,const Polynomial& poly){
 		cout <<"["<<i<<"]"<<p.res()[i].coeficient()<<"^"<<p.res()[i].power()<<endl;	
 	}
 
+	cout<<"The value of p is: "<<p<<endl;
+	cout<<"The value of poly is: "<<poly<<endl;
+	abort();
+}
+/**
+ * Fonction for debugging the addition operators
+ * @argm: two polynomials objects.
+ */
+void debuggingAddi(Polynomial& p,const Polynomial& poly){
+	cout << "p.perms:";
+	for(size_t i(0); i < p.terms().size();++i){
+		if(p.terms()[i].power() > 0){
+			cout << "["<<p.terms()[i].coeficient()<<"x^"<<p.terms()[i].power()<<"] ";	
+		} else {
+			cout << "["<<p.terms()[i].coeficient()<<"] ";	
+		}
+	}
+	cout <<endl;
+	cout << "poly.perms:";
+	for(size_t i(0); i < poly.terms().size();++i){
+		if(poly.terms()[i].power() > 0){
+			cout << "["<<poly.terms()[i].coeficient()<<"x^"<<poly.terms()[i].power()<<"] ";	
+		} else {
+			cout << "["<<poly.terms()[i].coeficient()<<"] ";	
+		}
+	}
+	cout <<endl;
+	cout<<"------"<<endl;	
+	for(size_t i(0); i < p.terms().size(); ++i){
+		for(size_t j(0); j < poly.terms().size(); ++j){
+			if(p.terms()[i].power() == poly.terms()[j].power()){
+				cout<< "("<<p.terms()[i].coeficient()<<")"<<" + "<<"("<<poly.terms()[j].coeficient()<<")"<<" = "<<p.terms()[i].coeficient()+poly.terms()[j].coeficient()<<endl;
+			}
+		}
+		cout<<"-----"<<endl;
+	}
+/*
+	cout << "p.res..."<<endl;
+	for(size_t i(0); i < p.res().size();++i){
+		cout <<"["<<i<<"]"<<p.res()[i].coeficient()<<"^"<<p.res()[i].power()<<endl;	
+	}
+*/
 	cout<<"The value of p is: "<<p<<endl;
 	cout<<"The value of poly is: "<<poly<<endl;
 	abort();
