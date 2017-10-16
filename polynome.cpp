@@ -69,6 +69,8 @@ class Polynomial{
 	private:
 		monomials terms_; // The vector for the three monomials.
 		monomials res_; // The calculated result.  
+		//Polynomial divide(Polynomial&);//Divide two polynomials
+
 	public:
 
 		//Default construct for the founded result.
@@ -98,12 +100,24 @@ class Polynomial{
 		Polynomial operator*(double) const;//done.
 		Polynomial& operator*=(const Polynomial&); //done.
 		Polynomial& operator*=(double); //done.
-		Polynomial& operator+=(const Polynomial&); //working on it.
+		Polynomial& operator+=(const Polynomial&); //done.
+		Polynomial operator+(const Polynomial&) const; //done.
+		Polynomial& operator-=(const Polynomial&); //done.
+		Polynomial operator-(const Polynomial&) const; //done.
 
 		
-		//Simplified the result.
+		//Simplification of the result.
 		void simplification();
 		void simplification(result&);
+		
+		//Get the greatest power
+		double top();
+		int topDeg();
+
+		//test divide
+		Polynomial divide(Polynomial&);//Divide two polynomials
+
+
 };
 
 
@@ -116,8 +130,9 @@ Polynomial operator*(double, Polynomial const&);
 //Prototypes functions
 double userCoef();
 Polynomial polyMaker();
-void debuggingMulti(Polynomial&,const Polynomial&);
-void debuggingAddi(Polynomial&,const Polynomial&);
+void debuggingMulti(Polynomial&, const Polynomial&);
+void debuggingAddi(Polynomial&, const Polynomial&);
+void debuggingSubs(Polynomial&, const Polynomial&);
 
 //------------------------------------------------------//Main.
 int main(){
@@ -126,16 +141,20 @@ int main(){
 	Monomial three(-1.0,0);//test monomial.
 	//--*
 	Monomial four(-1.0,2);//test monomial.
-	Monomial five(-15.0,1);//test monomial.
-	Monomial six(-6.0,2);//test monomial.
+	Monomial five(1.0,1);//test monomial.
+	Monomial six(-6.0,0);//test monomial.
 	//--*
 	Monomial seven(9.0,2);//test monomial.
 	Monomial eight(-5.0,1);//test monomial.
 	Monomial nine(-3.0,0);//test monomial.
 	//--*
-	Monomial ten(-6.0,2);//test monomial.
+	Monomial ten(6.0,2);//test monomial.
 	Monomial eleven(-4.0,1);//test monomial.
 	Monomial twelve(-7.0,0);//test monomial.
+
+	Monomial thirteen(12.0,1);
+	Monomial fifteen(1.0,2);
+	Monomial fourteen(-4.0,0);
 
 	Polynomial p1;
 	p1.addMonomials((monomials){one,two,three});//cast the unknown vector for the function argument.
@@ -150,19 +169,30 @@ int main(){
 	p4.addMonomials((monomials){ten,eleven,twelve});
 
 	Polynomial p5;
-	p5.addMonomials(six);
-/*	
+	p5.addMonomials((monomials){five,six});
+
+	Polynomial p6;
+	p6.addMonomials((monomials){thirteen,fourteen,fifteen});
+	
+	/*cout << "Multiplication:"<<endl;
 	cout <<"("<<p1 <<")"<< " *= "<<"("<< p2<<")"<< " = ";
 	cout << (p1*=p2) <<endl;// we multiply here.
 	Polynomial r(p3*p4);
 	cout <<"("<<p3<<")"<< " * "<<"("<< p4<<")"<< " = "<< r <<endl;// we multiply here
 	cout <<"("<<p2<<")"<< " * "<<"(5)"<< " = "<< p2*5.0 <<endl;// we multiply here.
 	cout <<"("<<p4<<")"<< " *= "<<"(7)"<< " = ";
-	cout << (p4*=7.0) << endl;// we multiply here.
+    cout << (p4*=7.0) << endl;// we multiply here.
 	cout <<"(8)"<<" * ("<<p5<<")"<< " = ";
-	cout << 8.0*p5 << endl;// we multiply here.
-*/
-	cout<<"("<<p1<<")"<<" + " <<"("<<p2<<")"<<" = "<<(p1+=p2)<<endl;
+	cout << (8.0*p5) << endl;// we multiply here.
+	cout << "Addition:"<<endl;
+	cout<<"("<<p6<<")"<<" += " <<"("<<p2<<")"<<" = ";
+	cout<<(p6+=p2)<<endl;
+	cout<<"("<<p3<<")"<<" + " <<"("<<p4<<")"<<" = "<<(p3+p4)<<endl;
+	cout << "Substraction:"<<endl;
+	cout <<"("<<p4<<")"<<"-="<<"("<<p5<<")"<<" = ";
+	cout <<(p4-=p5)<<endl;
+	cout <<"("<<p5<<")"<<"-"<<"("<<p3<<")"<<" = "<<(p5-p3)<<endl;*/
+	cout<<"p4 / p5 ="<< p4.divide(p5)<<endl;
 	return 0;
 }
 //----------------------------------------------------// End main.
@@ -304,10 +334,9 @@ void Polynomial::reorder(result& res){
 }
 
 /*
- * use the insertion function to remove the null monomials !!!
+ * Remove the null monomials !!!
  */
 void Polynomial::simplification(){
-	int index(0);
 	for(size_t i(0); i <terms().size(); ++i){
 		if(terms()[i].coeficient() == 0 or terms()[i].coeficient() == -0){
 			terms_.erase(terms().begin()+i);
@@ -316,11 +345,10 @@ void Polynomial::simplification(){
 }
 
 /*
- * use the insertion function to remove the null monomials !!!
+ * Remove the null monomials !!!
 
  */
 void Polynomial::simplification(result& res){
-	int index(0);
 	for(size_t i(0); i <res.size(); ++i){
 		if(res[i].coeficient() == 0 or res[i].coeficient() == -0){
 			res.erase(res.begin()+i);
@@ -328,7 +356,79 @@ void Polynomial::simplification(result& res){
 	}
 }
 
+/**
+ * Get the coeficient of the biggest degree in the poly.
+ */
+double Polynomial::top(){
+	if(terms().size() > 2){
+		if((terms()[0].power() < terms()[1].power()) or (terms()[0].power() and terms()[2].power())){
+			reorder();	
+		}		
+	}else if(terms().size() < 3){
+		if(terms()[0].power() < terms()[1].power()){
+			reorder();
+		}
+	}
+	return terms()[0].coeficient();
+}
 
+int Polynomial::topDeg(){
+	int po(0);
+	for(size_t i(0); i < terms().size();++i){
+		if(terms()[i].coeficient() == top()){
+			po = terms()[i].power();	
+		}
+	}
+		return po;
+}
+
+/**
+ * Divie two polys.
+ */
+Polynomial Polynomial::divide(Polynomial&  poly){
+	Polynomial quotient(0.0), rest(*this), temp(0.0);
+	double a(0),rtop(0.0),dtop(poly.top());
+	int delta(rest.topDeg() - poly.topDeg()); 
+
+	cout <<"P -> "<<*this<<endl;
+	cout <<"Poly -> "<<poly<<endl;
+	cout << "--------->"<<endl;
+
+
+	while(delta >= 0 /*and rest.terms()[0].coeficient() != 0*/){
+		rtop = rest.top();
+
+		//a
+		a = rtop / dtop;
+		cout << "a = "<< a<<endl;
+		temp.terms_[0].coeficient(a);
+		temp.terms_[0].power(delta);
+		cout << "ax^delta = "<<temp<<endl; 
+
+		//Q
+		quotient +=temp;
+		cout << "Q = "<<quotient<<endl;
+
+		//R
+		temp *= poly;
+		rest -= temp;
+		cout << "rest = "<< rest<<endl;
+
+		//Delta
+		delta = rest.topDeg() - poly.topDeg(); 
+		cout << "delta = "<< delta<<endl;
+		cout << "---------------------------|"<<endl;
+		
+	}
+
+	/*Quotient must be :  6x+32.*/
+	/*Rest : 185.*/
+	
+	cout <<"-------- Result:"<<endl;
+	return quotient;
+}
+
+//*********************************Internal Overload operator methode.
 /**
  * Overload operator to multiply a monomial by another one.
  */
@@ -355,7 +455,7 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 			if(difference == 1 and sizeOfQ == 3){
 				addon = new monomials(3);
 			} else if(difference == 1 and sizeOfQ == 2){
-				addon = new monomials(2);
+				addon = new monomials(1);
 			} else if(difference == 2 and sizeOfQ == 3){
 				addon = new monomials(3);
 			}
@@ -373,12 +473,11 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				if(termSize == 3 and sizeOfQ == 2){
 					addon = new monomials(2);
 				}else if(termSize == 2 and sizeOfQ == 1){
-					//addon = new monomials(1);
 					needAddon = false;
 				}
 			}else if(difference == -2){
 				if(termSize == 3 and sizeOfQ == 1){
-					addon = new monomials(1);
+					needAddon = false;
 				}
 			}
 		}
@@ -412,6 +511,7 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 				++v;
 			}
 		}
+		//debuggingMulti(*this,poly);
 		// Set the result in a decremental organisation and simplify.
 		reorder(res());
 		simplification(res());
@@ -472,20 +572,60 @@ Polynomial& Polynomial::operator*=(const Polynomial& poly){
 		return *this;
 }
 /**
- * Overload operator for the addition.
+ * Overload operator for the automatique addition.
  */
 Polynomial& Polynomial::operator+=(const Polynomial& poly){
+	if(terms()[0].coeficient() == 0 and terms()[0].power() == 0){
+		*this = poly;	
+	} else {
+		for(size_t i(0); i < terms().size(); ++i){
+			for(size_t j(0); j < poly.terms().size();++j){
+				if(terms()[i].power() == poly.terms()[j].power()){
+					terms_[i].coeficient(terms()[i].coeficient()+poly.terms()[j].coeficient());
+				}
+			}
+		}
+
+	}
+	return *this;
+}
+
+/**
+ * Overload operator for the simple addition. 
+ */
+Polynomial Polynomial::operator+(const Polynomial& c) const {
+	return Polynomial(*this) += c;
+}
+
+/**
+ * Overload operator for automatique substraction.
+ */
+Polynomial& Polynomial::operator-=(const Polynomial& c){
 	for(size_t i(0); i < terms().size(); ++i){
-		for(size_t j(0); j < poly.terms().size();++j){
-			if(terms()[i].power() == poly.terms()[j].power()){
-				terms_[i].coeficient(terms()[i].coeficient()+poly.terms()[j].coeficient());
+		for(size_t j(0); j < c.terms().size();++j){
+			if(terms()[i].power() == c.terms()[j].power()){
+				terms_[i].coeficient(terms()[i].coeficient()-c.terms()[j].coeficient());
 			}
 		}
 	}
-	//debuggingAddi(*this,poly);
+
+	if(terms_[0].coeficient() == 0){
+		exchange(terms_[0],terms_[terms().size()-1]);		
+		terms_.pop_back();
+		reorder();
+	}
+
 	return *this;
 }
-//-------------internal Overload operator* methode*.
+
+/**
+ * overload operator for simple substrationc
+ */
+Polynomial Polynomial::operator-(const Polynomial& c) const {
+	return (Polynomial(*this)-=c);
+}
+
+
 /**
  * Overload operator: two multiply a polynomial by another one.
  */
@@ -522,20 +662,21 @@ bool Monomial::operator==(Monomial const& mo) const{
 }
 
 
-//************externalt Overload operator function.
+//*****************************external Overload operator function.
 /*
  */
 Polynomial operator*(double d, Polynomial const& c){
 	return (Polynomial(d) * c);
 }
+//****************************End external Overload operator function.
 
 //------------//Debug
 /**
  * Fonction for debugging the multiplication operators
  * @argm: two polynomials objects.
  */
-void debuggingAddi(Polynomial& p,const Polynomial& poly);
 void debuggingMulti(Polynomial& p,const Polynomial& poly){
+	cout << endl;
 	cout << "p.perms:";
 	for(size_t i(0); i < p.terms().size();++i){
 		cout << "["<<p.terms()[i].coeficient()<<"x^"<<p.terms()[i].power()<<"] ";	
@@ -566,8 +707,6 @@ void debuggingMulti(Polynomial& p,const Polynomial& poly){
 		cout <<"["<<i<<"]"<<p.res()[i].coeficient()<<"^"<<p.res()[i].power()<<endl;	
 	}
 
-	cout<<"The value of p is: "<<p<<endl;
-	cout<<"The value of poly is: "<<poly<<endl;
 	abort();
 }
 /**
@@ -602,14 +741,50 @@ void debuggingAddi(Polynomial& p,const Polynomial& poly){
 		}
 		cout<<"-----"<<endl;
 	}
-/*
-	cout << "p.res..."<<endl;
-	for(size_t i(0); i < p.res().size();++i){
-		cout <<"["<<i<<"]"<<p.res()[i].coeficient()<<"^"<<p.res()[i].power()<<endl;	
-	}
-*/
+
 	cout<<"The value of p is: "<<p<<endl;
 	cout<<"The value of poly is: "<<poly<<endl;
 	abort();
 }
+
+/**
+ * Fonction for debugging the Substractiion operators
+ * @argm: two polynomials objects.
+ */
+void debuggingSubs(Polynomial& p,const Polynomial& poly){
+	cout <<"size of the first polynomiial : "<<p.terms().size()<<endl;
+	cout <<"size of the second polynomiial : "<<poly.terms().size()<<endl;
+	cout << "First polynomial:";
+	for(size_t i(0); i < p.terms().size();++i){
+		if(p.terms()[i].power() > 0){
+			cout << "["<<p.terms()[i].coeficient()<<"x^"<<p.terms()[i].power()<<"] ";	
+		} else {
+			cout << "["<<p.terms()[i].coeficient()<<"] ";	
+		}
+	}
+	cout <<endl;
+	cout << "Second polynomial:";
+	for(size_t i(0); i < poly.terms().size();++i){
+		if(poly.terms()[i].power() > 0){
+			cout << "["<<poly.terms()[i].coeficient()<<"x^"<<poly.terms()[i].power()<<"] ";	
+		} else {
+			cout << "["<<poly.terms()[i].coeficient()<<"] ";	
+		}
+	}
+	cout <<endl;
+	cout<<"------"<<endl;	
+	for(size_t i(0); i < p.terms().size(); ++i){
+		for(size_t j(0); j < poly.terms().size(); ++j){
+			if(p.terms()[i].power() == poly.terms()[j].power()){
+				cout<< "("<<p.terms()[i].coeficient()<<")"<<" - "<<"("<<poly.terms()[j].coeficient()<<")"<<" = "<<p.terms()[i].coeficient()-poly.terms()[j].coeficient()<<endl;
+			}
+		}
+		cout<<"-----"<<endl;
+	}
+
+	cout<<"The value of p is: "<<p<<endl;
+	cout<<"The value of poly is: "<<poly<<endl;
+	abort();
+}
+
 
